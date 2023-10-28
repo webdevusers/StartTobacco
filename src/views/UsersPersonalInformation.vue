@@ -247,7 +247,7 @@
                       {{ getTheSum(item.oldPrice) }}₴
                     </div>
                     <!-- <div class="product-card-discount-info" v-if="discount > 0">
-                    - {{ item.discount.toFixed(0) }}%
+                    - {{ item?.discount.toFixed(0) }}%
                   </div> -->
                   </div>
                   <div class="product-card-price">
@@ -356,7 +356,7 @@
                       {{ getTheSum(item.oldPrice) }}₴
                     </div>
                     <!-- <div class="product-card-discount-info" v-if="discount > 0">
-                    - {{ item.discount.toFixed(0) }}%
+                    - {{ item?.discount.toFixed(0) }}%
                   </div> -->
                   </div>
                   <div class="product-card-price">
@@ -839,8 +839,6 @@ export default {
   position: relative;
   border-radius: 10px;
   background: #fff;
-
-  /* shadow for cards */
   box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.2);
   user-select: none;
   cursor: pointer;

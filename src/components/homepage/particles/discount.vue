@@ -1,5 +1,5 @@
 <template>
-  <div class="discount">
+  <div class="discount" v-if="products.length > 0">
     <div class="discount__wrap wrap">
       <div class="discount__title">Акційні товари</div>
       <swiper
@@ -19,7 +19,7 @@
                 @click.prevent="goToFlavoring(item)"
               >
                 <div class="product-card-img">
-                  <img :src="item.imageUrl" :alt="title" />
+                  <img :src="item.imageUrl" alt="title" />
                 </div>
                 <div class="product-card-info">
                   <div class="product-card-liked">
@@ -53,7 +53,7 @@
                     </template>
                   </div>
                   <div class="product-card-title">
-                    <h3>{{ item.title }}</h3>
+                    <h3>{{ item?.title }}</h3>
                   </div>
                   <div class="product-card-reviews">
                     <div class="product-card-reviews-stars">
@@ -91,8 +91,11 @@
                     <div class="product-card-old-price">
                       {{ item.oldPrice }}₴
                     </div>
-                    <div class="product-card-discount-info" v-if="discount > 0">
-                      - {{ item.discount.toFixed(0) }}%
+                    <div
+                      class="product-card-discount-info"
+                      v-if="item?.discount > 0"
+                    >
+                      - {{ item?.discount.toFixed(0) }}%
                     </div>
                   </div>
                   <div class="product-card-price">{{ item.newPrice }}₴</div>
@@ -113,7 +116,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
-
+import axios from "axios";
 export default {
   data() {
     return {
@@ -134,53 +137,7 @@ export default {
           slidesPerView: 1,
         },
       },
-      products: [
-        {
-          id: 1,
-          imageUrl: "/images/product.png",
-          liked: true,
-          title: "Ароматизатор TBA Blueberry (Wild) (Дикая Черника)",
-          isOnSale: true,
-          oldPrice: 29999,
-          newPrice: 249999,
-        },
-        {
-          id: 2,
-          imageUrl: "/images/product.png",
-          liked: true,
-          title: "Ароматизатор TBA Blueberry (Wild) (Дикая Черника)",
-          isOnSale: true,
-          oldPrice: 29999,
-          newPrice: 249999,
-        },
-        {
-          id: 3,
-          imageUrl: "/images/product.png",
-          liked: true,
-          title: "Ароматизатор TBA Blueberry (Wild) (Дикая Черника)",
-          isOnSale: true,
-          oldPrice: 29999,
-          newPrice: 249999,
-        },
-        {
-          id: 4,
-          imageUrl: "/images/product.png",
-          liked: true,
-          title: "Ароматизатор TBA Blueberry (Wild) (Дикая Черника)",
-          isOnSale: true,
-          oldPrice: 29999,
-          newPrice: 249999,
-        },
-        {
-          id: 5,
-          imageUrl: "/images/product.png",
-          liked: true,
-          title: "Ароматизатор TBA Blueberry (Wild) (Дикая Черника)",
-          isOnSale: false,
-          oldPrice: 29999,
-          newPrice: 249999,
-        },
-      ],
+      products: [],
     };
   },
   components: {
@@ -189,6 +146,9 @@ export default {
   },
   methods: {
     goToFlavoring(item) {
+      console.log("====================================");
+      console.log(item);
+      console.log("====================================");
       this.$router.push({
         path: `/flavoring/`,
         query: { flavoringId: item.id },
@@ -199,6 +159,22 @@ export default {
     return {
       modules: [Pagination],
     };
+  },
+  mounted() {
+    this.$nextTick(async function () {
+      let urlStr =
+        "https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/products/sale";
+
+      const response = await axios
+        .get(urlStr, {})
+        .then(function (response) {
+          return response.data.onSaleProducts;
+        })
+        .catch(function (error) {
+          throw error;
+        });
+      this.products = response;
+    });
   },
 };
 </script>

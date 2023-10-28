@@ -1,5 +1,5 @@
 <template>
-  <div class="newItems">
+  <div class="newItems" v-if="products.length > 0">
     <div class="newItems__wrap wrap">
       <div class="newItems__title">Новинки</div>
       <swiper
@@ -19,7 +19,7 @@
                 @click.prevent="goToFlavoring(item)"
               >
                 <div class="product-card-img">
-                  <img :src="item.imageUrl" :alt="title" />
+                  <img :src="item.imageUrl" alt="title" />
                 </div>
                 <div class="product-card-info">
                   <div class="product-card-liked">
@@ -91,8 +91,11 @@
                     <div class="product-card-old-price">
                       {{ item.oldPrice }}₴
                     </div>
-                    <div class="product-card-discount-info" v-if="discount > 0">
-                      - {{ item.discount.toFixed(0) }}%
+                    <div
+                      class="product-card-discount-info"
+                      v-if="item?.discount > 0"
+                    >
+                      - {{ item?.discount.toFixed(0) }}%
                     </div>
                   </div>
                   <div class="product-card-price">{{ item.newPrice }}₴</div>
@@ -113,6 +116,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
+import axios from "axios";
 
 export default {
   data() {
@@ -134,53 +138,7 @@ export default {
           slidesPerView: 1,
         },
       },
-      products: [
-        {
-          id: 1,
-          imageUrl: "/images/product.png",
-          liked: true,
-          title: "Ароматизатор TBA Blueberry (Wild) (Дикая Черника)",
-          isOnSale: true,
-          oldPrice: 29999,
-          newPrice: 249999,
-        },
-        {
-          id: 2,
-          imageUrl: "/images/product.png",
-          liked: true,
-          title: "Ароматизатор TBA Blueberry (Wild) (Дикая Черника)",
-          isOnSale: true,
-          oldPrice: 29999,
-          newPrice: 249999,
-        },
-        {
-          id: 3,
-          imageUrl: "/images/product.png",
-          liked: false,
-          title: "Ароматизатор TBA Blueberry (Wild) (Дикая Черника)",
-          isOnSale: true,
-          oldPrice: 29999,
-          newPrice: 249999,
-        },
-        {
-          id: 4,
-          imageUrl: "/images/product.png",
-          liked: false,
-          title: "Ароматизатор TBA Blueberry (Wild) (Дикая Черника)",
-          isOnSale: true,
-          oldPrice: 29999,
-          newPrice: 249999,
-        },
-        {
-          id: 5,
-          imageUrl: "/images/product.png",
-          liked: false,
-          title: "Ароматизатор TBA Blueberry (Wild) (Дикая Черника)",
-          isOnSale: true,
-          oldPrice: 29999,
-          newPrice: 249999,
-        },
-      ],
+      products: [],
     };
   },
   components: {
@@ -199,6 +157,22 @@ export default {
     return {
       modules: [Pagination],
     };
+  },
+  mounted() {
+    this.$nextTick(async function () {
+      let urlStr =
+        "https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/products/new";
+
+      const response = await axios
+        .get(urlStr, {})
+        .then(function (response) {
+          return response.data.newProducts;
+        })
+        .catch(function (error) {
+          throw error;
+        });
+      this.products = response;
+    });
   },
 };
 </script>

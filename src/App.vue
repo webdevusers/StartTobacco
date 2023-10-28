@@ -95,26 +95,42 @@ a {
 
 .product-card {
   z-index: -1;
-  max-width: 280px;
+  max-width: 250px;
   position: relative;
   border-radius: 10px;
   background: #fff;
-
-  /* shadow for cards */
   box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.2);
   user-select: none;
   cursor: pointer;
+  @media (max-width: 570px) {
+    width: 150px;
+  }
+  &-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 27px;
+    @media (max-width: 570px) {
+      width: 67px;
+      height: 67px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
 
   &-info {
     padding: 0 16px;
   }
-
-  &-img {
-    padding-top: 40px;
-    text-align: center;
-    margin-bottom: 20px;
+  &__void {
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.28px;
+    @media (max-width: 570px) {
+      font-size: 0.5em;
+    }
   }
-
   &-liked {
     cursor: pointer;
     position: absolute;
@@ -125,12 +141,15 @@ a {
   &-title {
     color: #292929;
     font-family: tobacco;
-    font-size: 16px;
+    font-size: 1rem;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
     margin-bottom: 12px;
     user-select: none;
+    @media (max-width: 570px) {
+      font-size: 0.5rem;
+    }
   }
 
   &-discount {
@@ -147,21 +166,27 @@ a {
   &-old-price {
     color: rgba(41, 41, 41, 0.5);
     font-family: tobacco;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 400;
     letter-spacing: 0.32px;
     margin-right: 10px;
+    @media (max-width: 570px) {
+      font-size: 0.5em;
+    }
   }
 
   &-price {
     color: #292929;
     font-family: tobacco;
-    font-size: 24px;
+    font-size: 1.5rem;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
     letter-spacing: 0.48px;
     padding-bottom: 20.5px;
+    @media (max-width: 570px) {
+      font-size: 0.75rem;
+    }
   }
 }
 </style>
