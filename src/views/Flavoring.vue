@@ -82,7 +82,7 @@
           <base-select
             class="capacity__select"
             v-model:modelValue="containerVolume"
-            v-bind:options="getContainerVolume"
+            v-bind:options="products.containerVolume"
           />
         </div>
         <div class="number">
@@ -185,10 +185,27 @@ export default {
       localStorage.setItem(`order`, JSON.stringify(resultArray));
     },
   },
-  computed: {
-    getContainerVolume() {
-      return this.products.containerVolume;
-    },
+  computed: {},
+  // const currentParams = { ...this.$route.query };
+  mounted() {
+    this.$nextTick(async function () {
+      const currentParams = { ...this.$route.query };
+      console.log("====================================");
+      console.log(currentParams);
+      console.log("====================================");
+      // let urlStr =
+      //   "https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/products/sale";
+
+      // const response = await axios
+      //   .get(urlStr, {})
+      //   .then(function (response) {
+      //     return response.data.onSaleProducts;
+      //   })
+      //   .catch(function (error) {
+      //     throw error;
+      //   });
+      // this.products = response;
+    });
   },
 };
 </script>

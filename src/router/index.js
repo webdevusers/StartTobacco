@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/homepage.vue";
-import allCategories from "../views/allCategories.vue";
+import allCategories from "../views/AllCategories.vue";
 import SubC from "../views/Subcategory.vue";
 import Flavoring from "../views/Flavoring.vue";
 import PlacingAnOrder from "../views/PlacingAnOrder.vue";
