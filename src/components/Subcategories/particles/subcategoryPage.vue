@@ -74,6 +74,12 @@ export default {
     };
   },
   methods: {
+    goToFlavoring(item) {
+      this.$router.push({
+        path: `/flavoring/`,
+        query: { flavoringId: item._id },
+      });
+    },
     async fetchFindSection(id) {
       try {
         this.isLoader = true;
