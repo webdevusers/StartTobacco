@@ -8,7 +8,7 @@
       </div>
       <div class="box__right">
         <div class="breadcrumbs">
-          <ul class="breadcrumbs__list" v-if="section">
+          <ul class="breadcrumbs__list" v-if="section.title">
             <li class="breadcrumbs__item">
               <a class="breadcrumbs__link" href="#">{{ category.title }}</a>
             </li>

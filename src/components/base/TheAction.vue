@@ -49,10 +49,7 @@
       <div class="action-bottom">
         <div class="action-bottom-items">
           <template v-for="(item, idx) in categories" :key="idx">
-            <div
-              class="action-bottom-item"
-              @mouseleave="this.showCategory = ''"
-            >
+            <div class="action-bottom-item" @mouseleave="showCategory = ''">
               <div
                 class="action-bottom-name"
                 @mouseenter="showCategory = item.title"
@@ -76,7 +73,7 @@
                     <div class="action-bottom-subcategories">
                       <div class="action-bottom-subcategories__link">
                         <a
-                          v-for="(itm, idx) in item.sections"
+                          v-for="itm in item.sections"
                           :key="itm._id"
                           @click.prevent="getUserNavigation(itm)"
                         >
