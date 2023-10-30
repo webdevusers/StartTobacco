@@ -633,9 +633,6 @@ export default {
       );
     },
     goToFlavoring(item) {
-      console.log("====================================");
-      console.log(item.id);
-      console.log("====================================");
       this.$router.push({
         path: `/flavoring/`,
         query: { flavoringId: item.id },

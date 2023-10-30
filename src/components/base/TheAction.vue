@@ -97,10 +97,12 @@
     <regModal
       v-if="regContent"
       @modal="(regContent = !regContent), (authContent = true)"
+      v-model:regContent="regContent"
     />
     <authModal
       v-if="authContent"
       @modal="(authContent = !authContent), (regContent = true)"
+      v-model:authContent="authContent"
     />
 
     <cart v-if="cartContent" @cart="cartContent = !cartContent" />
@@ -142,7 +144,7 @@ export default {
     getUserNavigation(item) {
       this.$router.push({
         path: `/subcategory/`,
-        query: { id: item._id },
+        query: { categoryId: item.category, sectinId: item._id },
       });
     },
   },

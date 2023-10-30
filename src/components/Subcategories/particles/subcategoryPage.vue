@@ -77,7 +77,7 @@ export default {
     goToFlavoring(item) {
       this.$router.push({
         path: `/flavoring/`,
-        query: { flavoringId: item._id },
+        query: { flavoringId: item._id, sectionName: this.categories._id },
       });
     },
     async fetchFindSection(id) {
@@ -85,9 +85,7 @@ export default {
         this.isLoader = true;
         let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/section/find/${id}`;
         const response = await axios.get(urlStr, {});
-
         this.categories = response.data.section;
-        console.log(this.categories);
         this.fetchFindCategory(this.categories.category);
       } catch (err) {
         console.log(err);
@@ -100,7 +98,6 @@ export default {
         this.isLoader = true;
         let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/category/find/${category}`;
         const response = await axios.get(urlStr, {});
-
         this.products = response.data.category;
       } catch (err) {
         console.log(err);
@@ -117,7 +114,8 @@ export default {
   mounted() {
     this.$nextTick(function () {
       const currentParams = { ...this.$route.query };
-      this.fetchFindSection(currentParams.id);
+      //   this.fetchFindCategory(currentParams.categoryId);
+      this.fetchFindSection(currentParams.sectinId);
     });
   },
 };

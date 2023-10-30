@@ -4,7 +4,6 @@ import allCategories from "../views/AllCategories.vue";
 import SubC from "../views/Subcategory.vue";
 import Flavoring from "../views/Flavoring.vue";
 import PlacingAnOrder from "../views/PlacingAnOrder.vue";
-import UserArea from "../views/UserArea.vue";
 import UsersPersonalInformation from "../views/UsersPersonalInformation.vue";
 
 const router = createRouter({
@@ -39,11 +38,6 @@ const router = createRouter({
       path: "/subcategory",
       name: "subcategory",
       component: SubC,
-    },
-    {
-      path: "/personal",
-      name: "Personal",
-      component: UserArea,
     },
   ],
 });

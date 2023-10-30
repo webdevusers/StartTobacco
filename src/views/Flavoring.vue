@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="!isLoader">
     <div class="box">
       <div class="card__hover">
         <div class="box__left">
@@ -8,9 +8,9 @@
       </div>
       <div class="box__right">
         <div class="breadcrumbs">
-          <ul class="breadcrumbs__list">
+          <ul class="breadcrumbs__list" v-if="section">
             <li class="breadcrumbs__item">
-              <a class="breadcrumbs__link" href="#">Ароматизатори для тютюну</a>
+              <a class="breadcrumbs__link" href="#">{{ category.title }}</a>
             </li>
             <svg
               class="breadcrumbs__svg"
@@ -26,7 +26,9 @@
               />
             </svg>
             <li class="breadcrumbs__item">
-              <a class="breadcrumbs__link" href="#">Фруктові ароматизотори</a>
+              <a class="breadcrumbs__link" href="#" @click="goToSection">{{
+                section.title
+              }}</a>
             </li>
           </ul>
         </div>
@@ -38,7 +40,7 @@
           <!-- Ароматизатор TBA Blueberry <br />(Wild) (Дикая Черника) -->
         </div>
         <div class="reviews">
-          <div class="reviews__stars">
+          <div class="reviews__stars" v-if="products.ratingVoid">
             <div
               v-for="rating in [0, 1, 2, 3, 4]"
               :key="rating"
@@ -74,12 +76,22 @@
           </a>
         </div>
         <div class="prises">
-          <div class="prises__oldPrice">{{ products.oldPrice }}</div>
-          <div class="prises__newPrice">{{ products.newPrice }}₴</div>
+          <div class="prises__oldPrice" v-if="products?.oldPrice">
+            {{ products.oldPrice }}
+          </div>
+          <div class="prises__newPrice" v-if="products?.newPrice">
+            {{ products.newPrice }}₴
+          </div>
         </div>
         <div class="capacity">
-          <div class="capacity__title">Ємність</div>
+          <div
+            class="capacity__title"
+            v-if="products?.containerVolume?.length > 0"
+          >
+            Ємність
+          </div>
           <base-select
+            v-if="products?.containerVolume?.length > 0"
             class="capacity__select"
             v-model:modelValue="containerVolume"
             v-bind:options="products.containerVolume"
@@ -101,49 +113,30 @@
         <button class="button" @click="addToCart">Додати до кошику</button>
       </div>
     </div>
-    <div class="description">
+    <div class="description" v-if="products.text">
       <div class="description__title">Опис</div>
-      <div class="description__text">{{ products.text }}</div>
+      <div class="description__text">{{ products?.text }}</div>
     </div>
+  </div>
+  <div v-else>
+    <base-loader />
   </div>
 </template>
 
 <script>
 import BaseSelect from "@/components/UI/BaseSelect.vue";
+import BaseLoader from "@/components/UI/BaseLoader.vue";
+import axios from "axios";
 export default {
-  components: { BaseSelect },
+  components: { BaseSelect, BaseLoader },
   data() {
     return {
-      products: {
-        id: 1,
-        ratingVoid: 5,
-        userVoid: {
-          id: 1,
-          text: "text",
-          ratingVoid: "5",
-          user: { id: "1", name: "user1" },
-          time: "26.10.2023",
-        },
-        //////////////////////////// в карточке товара есть значек “99+”, подразумевается, что будут отзывы. Сейчас это никак не реализованно.
-        imageUrl: "/images/product.png",
-        liked: true,
-        //////////////////////////////не используется в дизайне, но можно обыграть и в карточке.
-        title: "Ароматизатор TBA Blueberry (Wild) (Дикая Черника)",
-        isOnSale: true,
-        //////////////////////////////не используется в дизайне, но можно обыграть и в карточке.
-        oldPrice: 29999,
-        //////////////////////////////не используется в дизайне, но можно обыграть и в карточке.
-        newPrice: 24999,
-        text: "Не следует, однако забывать, что новая модель организационной деятельности в значительной степени обуславливает создание позиций, занимаемых участниками в отношении поставленных задач. С другой стороны рамки и место обучения кадров представляет собой интересный эксперимент проверки дальнейших направлений развития. Идейные соображения высшего порядка,",
-        containerVolume: [
-          { id: 1, value: "0.001", name: "0.001л" },
-          { id: 2, value: "0.01", name: "0.01л" },
-          { id: 3, value: "0.1", name: "0.1л" },
-          { id: 4, value: "1", name: "1л" },
-        ],
-      },
+      products: [],
+      isLoader: false,
       containerVolume: "0.001",
       summ: 1,
+      section: {},
+      category: "",
     };
   },
   methods: {
@@ -184,27 +177,76 @@ export default {
 
       localStorage.setItem(`order`, JSON.stringify(resultArray));
     },
+    goToSection() {
+      this.$router.push({
+        path: `/subcategory/`,
+        query: { categoryId: this.category.id, sectinId: this.section.id },
+      });
+    },
+    goToCategory() {
+      this.$router.push({
+        path: `/subcategory/`,
+        query: { categoryId: this.category.id },
+      });
+    },
+    async fetchGetProduct(item) {
+      try {
+        this.isLoader = true;
+        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/product/find/${item}`;
+        // console.log(urlStr);
+        const response = await axios.get(urlStr, {});
+        this.products = response.data.product;
+        // console.log(this.products);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.isLoader = false;
+      }
+    },
+    async fetchFindSection(id) {
+      try {
+        this.isLoader = true;
+        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/section/find/${id}`;
+        const response = await axios.get(urlStr, {});
+
+        this.section = {
+          title: response.data.section.sectionName,
+          id: response.data.section._id,
+        };
+
+        this.fetchFindCategory(response.data.section.category);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.isLoader = false;
+      }
+    },
+    async fetchFindCategory(id) {
+      try {
+        this.isLoader = true;
+        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/category/find/${id}`;
+        const response = await axios.get(urlStr, {});
+        this.category = {
+          title: response.data.category.title,
+          id: response.data.category._id,
+        };
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.isLoader = false;
+      }
+    },
   },
   computed: {},
   // const currentParams = { ...this.$route.query };
   mounted() {
     this.$nextTick(async function () {
+      // https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/actions
       const currentParams = { ...this.$route.query };
-      console.log("====================================");
-      console.log(currentParams);
-      console.log("====================================");
-      // let urlStr =
-      //   "https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/products/sale";
-
-      // const response = await axios
-      //   .get(urlStr, {})
-      //   .then(function (response) {
-      //     return response.data.onSaleProducts;
-      //   })
-      //   .catch(function (error) {
-      //     throw error;
-      //   });
-      // this.products = response;
+      this.fetchGetProduct(currentParams.flavoringId);
+      if (currentParams.sectionName) {
+        this.fetchFindSection(currentParams.sectionName);
+      }
     });
   },
 };
