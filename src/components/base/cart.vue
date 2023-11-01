@@ -142,15 +142,6 @@ export default {
   align-items: center;
 }
 .cart {
-  // z-index: 13;
-  // position: fixed;
-  // left: 50%;
-  // top: 50%;
-  // transform: translate(-50%, -50%);
-
-  // background: white;
-  // border-radius: 5px;
-  // padding: 50px 100px;
   box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.2);
   padding: 50px 100px;
   background: white;
@@ -185,6 +176,10 @@ export default {
 
         font-family: tobacco;
         font-size: 16px;
+        @media (max-width: 765px) {
+          font-size: 14px;
+          padding: 5px 10px;
+        }
       }
 
       &.yellow {
@@ -195,6 +190,11 @@ export default {
         flex-direction: row;
         align-items: center;
         padding: 14px 12px;
+        @media (max-width: 765px) {
+          padding: 5px;
+          flex-direction: column;
+          justify-content: center;
+        }
       }
 
       &__price {
@@ -205,9 +205,18 @@ export default {
         font-style: normal;
         font-weight: 500;
         line-height: normal;
-
+        @media (max-width: 765px) {
+          font-size: 20px;
+        }
+        @media (max-width: 570px) {
+          font-size: 16px;
+          margin-right: 0;
+        }
         span {
           font-size: 16px;
+          @media (max-width: 765px) {
+            font-size: 14px;
+          }
         }
       }
 
@@ -216,6 +225,12 @@ export default {
         background: #efca00;
         padding: 10px 20px;
         font-family: tobacco;
+        @media (max-width: 765px) {
+          padding: 5px 10px;
+        }
+        @media (max-width: 570px) {
+          font-size: 12px;
+        }
       }
     }
   }
@@ -238,12 +253,20 @@ export default {
     align-items: center;
 
     font-family: tobacco;
-
+    @media (max-width: 570px) {
+      padding-left: 5px;
+    }
     p {
       font-size: 24px;
       padding: 7.5px;
       user-select: none;
       cursor: pointer;
+      @media (max-width: 765px) {
+        font-size: 18px;
+      }
+      @media (max-width: 570px) {
+        font-size: 16px;
+      }
     }
 
     .input {
@@ -258,6 +281,16 @@ export default {
       padding: 1px 5px;
       margin-left: 5px;
       margin-right: 5px;
+      @media (max-width: 765px) {
+        font-size: 16px;
+      }
+      @media (max-width: 570px) {
+        font-size: 14px;
+        // margin-left: 0;
+        // margin-right: 0;
+        // padding: 0;
+        width: 100%;
+      }
     }
   }
 
@@ -265,6 +298,12 @@ export default {
     font-size: 20px;
     font-weight: 800;
     font-family: tobacco;
+    @media (max-width: 765px) {
+      font-size: 16px;
+    }
+    @media (max-width: 570px) {
+      font-size: 14px;
+    }
   }
 
   &-name {
@@ -272,6 +311,13 @@ export default {
     font-size: 20px;
     max-width: 300px;
     margin-right: 20px;
+    @media (max-width: 765px) {
+      font-size: 16px;
+    }
+    @media (max-width: 570px) {
+      font-size: 14px;
+      margin-right: 10px;
+    }
   }
 }
 </style>

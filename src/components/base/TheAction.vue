@@ -3,12 +3,20 @@
     <!-- {{ categories }} -->
     <div class="action__wrap wrap">
       <div class="action-top">
-        <div class="action-categories">
+        <div class="action-categories no-mobile-version">
           <div class="action-categories-icon">
             <img src="/icons/burger-menu.svg" alt="" />
           </div>
           <div class="action-categories-title">
             <router-link to="/allcategories">Топ категорій</router-link>
+          </div>
+        </div>
+        <div class="action-categories mobile-version" @click="isMenu = !isMenu">
+          <div class="action-categories-icon">
+            <img src="/icons/burger-menu.svg" alt="" />
+          </div>
+          <div class="action-categories-title">
+            <router-link to="/allcategories">Категорії</router-link>
           </div>
         </div>
         <div class="action-search">
@@ -112,6 +120,84 @@
       />
     </div>
     <cart v-if="cartContent" @cart="cartContent = !cartContent" />
+    <div class="menu-mobile" v-if="isMenu" @click="isMenu = false">
+      <div class="menu-mobile-bottom" @click.stop>
+        <div class="menu-mobile-bottom-items">
+          <template v-for="(item, idx) in categories" :key="item._id">
+            <div
+              class="menu-mobile-bottom-item"
+              @mouseleave="showCategory = ''"
+            >
+              <div
+                class="menu-mobile-bottom-name"
+                @mouseenter="showCategory = item.title"
+              >
+                <a
+                  class="menu-mobile-bottom-name__title"
+                  @click.prevent="getUserCategory(item)"
+                >
+                  {{ item.title }}
+                </a>
+                <div
+                  class="menu-mobile-bottom-name__icon"
+                  v-if="item?.sections.length > 0"
+                >
+                  <ChevronDownIcon class="" aria-hidden="true" />
+                </div>
+              </div>
+              <div class="" v-if="item?.sections">
+                <template
+                  v-if="showCategory === item.title"
+                  @mouseenter="showCategory = item.title"
+                >
+                  <div class="menu-mobile-bottom-relative">
+                    <div class="menu-mobile-bottom-subcategories">
+                      <div class="menu-mobile-bottom-subcategories__link">
+                        <a
+                          v-for="itm in item.sections"
+                          :key="itm._id"
+                          @click.prevent="getUserSectinId(itm)"
+                        >
+                          <div class="menu-mobile-bottom-subcategories__text">
+                            {{ itm.sectionName }}
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
+        <div class="menu-mobile-personal">
+          <div class="menu-mobile-personal-icon">
+            <button
+              class="menu-mobile-personal-item"
+              @click="getUser"
+              style="cursor: pointer"
+            >
+              <img src="/icons/personal.svg" alt="" />
+              <div class="menu-mobile-personal-btn-title">
+                Особистий кабінет
+              </div>
+            </button>
+            <button class="menu-mobile-personal-item" @click="goToFlavoring">
+              <img src="/icons/liked.svg" alt="" />
+              <div class="menu-mobile-personal-btn-title">Обране</div>
+            </button>
+            <button
+              class="menu-mobile-personal-item"
+              @click="(isMenu = false), (cartContent = !cartContent)"
+              style="cursor: pointer"
+            >
+              <img src="/icons/cart.svg" alt="" />
+              <div class="menu-mobile-personal-btn-title">Кошик</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script setup>
@@ -137,6 +223,7 @@ export default {
       products: [],
       categories: [],
       user: [],
+      isMenu: false,
     };
   },
   components: {
@@ -152,22 +239,27 @@ export default {
       this.showCategory = null;
     },
     getUserSectinId(item) {
+      this.isMenu = false;
       this.$router.push({
         path: `/subcategory/`,
         query: { categoryId: item.category, sectinId: item._id },
       });
     },
     getUserCategory(item) {
+      this.isMenu = false;
+
       this.$router.push({
         path: `/subcategory/`,
         query: { categoryId: item._id },
       });
     },
     getUser() {
+      this.isMenu = false;
       this.regContent = true;
       this.userContent = true;
     },
     goToFlavoring(item) {
+      this.isMenu = false;
       if (this.user?.name == undefined) {
         this.regContent = true;
         this.userContent = true;
@@ -193,7 +285,6 @@ export default {
           throw error;
         });
       this.categories = response;
-      // console.log(this.categories);
     });
   },
   watch: {
@@ -249,7 +340,9 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-
+    // @media (max-width: 970px) {
+    //   display: none;
+    // }
     @media (max-width: 765px) {
       max-width: 130px;
     }
@@ -332,7 +425,9 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-
+    @media (max-width: 970px) {
+      display: none;
+    }
     &-item {
       padding: 7.5px;
       transition: 0.3s;
@@ -344,7 +439,10 @@ export default {
   }
 
   &-bottom {
-    // position: relative;
+    @media (max-width: 970px) {
+      display: none;
+    }
+
     margin-top: 34px;
     @media (max-width: 570px) {
       padding: 0 28px;
@@ -359,9 +457,7 @@ export default {
         row-gap: 15px;
       }
     }
-    // position: relative;
     &-item {
-      // margin-right: 30px;
       user-select: none;
 
       @media (max-width: 1220px) {
@@ -421,6 +517,127 @@ export default {
         }
       }
     }
+  }
+  .menu-mobile {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: none;
+    background: rgba(0, 0, 0, 0.25);
+    display: flex;
+    z-index: 100;
+    flex-direction: column;
+  }
+  .menu-mobile {
+    &-bottom {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 80%;
+      height: 100vh;
+      background: #ffffff;
+      box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.2);
+      &-items {
+        // display: flex;
+        // flex-direction: column;
+        // flex-direction: row;
+        // justify-content: space-between;
+        // flex-wrap: wrap;
+
+        padding: 20px 10px;
+        @media (max-width: 1040px) {
+          column-gap: 10px;
+          row-gap: 15px;
+        }
+      }
+      &-item {
+        padding: 10px 20px;
+      }
+      &-name {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+        font-family: tobacco;
+        cursor: pointer;
+
+        &__title {
+          font-size: 18px;
+          font-weight: 700;
+          &:active {
+            background: #5a595980;
+            border-radius: 10px;
+          }
+        }
+
+        &__icon {
+          margin-left: 0.5rem;
+          margin-right: -0.25rem;
+          width: 1.25rem;
+          height: 1.25rem;
+
+          &:hover {
+            color: #f3f4f6;
+          }
+        }
+      }
+      &-relative {
+        position: relative;
+      }
+      &-subcategories {
+        z-index: 11;
+        // position: absolute;
+        display: flex;
+        // flex-direction: column;
+        // align-items: center;
+        // padding: 5px 10px;
+        // background: #292929;
+        border-radius: 0px 0px 5px 5px;
+        width: 100%;
+
+        &__text {
+          // color: #ffffff;
+          padding: 10px;
+          transition: 0.3s;
+          white-space: pre;
+          &:hover {
+            background: #5a595980;
+            border-radius: 10px;
+          }
+        }
+      }
+    }
+    &-personal {
+      background: rgba(0, 0, 0, 0.25);
+      padding: 15px 10px;
+      &-icon {
+        display: flex;
+        flex-direction: column;
+      }
+      &-item {
+        display: flex;
+        column-gap: 10px;
+        padding: 10px 20px;
+      }
+      &-btn-title {
+        color: #ffffff;
+      }
+    }
+  }
+}
+.mobile-version {
+  display: none;
+  @media (max-width: 970px) {
+    display: flex;
+  }
+}
+.no-mobile-version {
+  display: flex;
+  @media (max-width: 970px) {
+    display: none;
   }
 }
 </style>
