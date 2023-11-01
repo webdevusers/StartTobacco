@@ -10,7 +10,9 @@
         <div class="breadcrumbs">
           <ul class="breadcrumbs__list" v-if="section.title">
             <li class="breadcrumbs__item">
-              <a class="breadcrumbs__link" href="#">{{ category.title }}</a>
+              <a class="breadcrumbs__link" href="#" @click="goToCategory">
+                {{ category.title }}
+              </a>
             </li>
             <svg
               class="breadcrumbs__svg"
@@ -26,9 +28,9 @@
               />
             </svg>
             <li class="breadcrumbs__item">
-              <a class="breadcrumbs__link" href="#" @click="goToSection">{{
-                section.title
-              }}</a>
+              <a class="breadcrumbs__link" href="#" @click="goToSection">
+                {{ section.title }}
+              </a>
             </li>
           </ul>
         </div>
@@ -103,7 +105,13 @@
             <button class="number__btn number__btn--minus" @click="minesOne()">
               -
             </button>
-            <input type="text" class="number__value" :value="summ" />
+
+            <input
+              type="text"
+              class="number__value"
+              :value="summ"
+              @input="summ = $event.target.value"
+            />
             <button class="number__btn number__btn--plus" @click="plusOne()">
               +
             </button>
@@ -137,6 +145,7 @@ export default {
       summ: 1,
       section: {},
       category: "",
+      token: "",
     };
   },
   methods: {
@@ -152,7 +161,7 @@ export default {
       let purchase = [
         {
           containerVolume: this.containerVolume,
-          summ: this.summ,
+          summ: +this.summ,
           products: this.products,
         },
       ];
@@ -163,12 +172,14 @@ export default {
       } else {
         localStorage.setItem(`order`, JSON.stringify(purchase));
       }
+
       let sumOrder = JSON.parse(localStorage.getItem(`order`));
       const summedItems = {};
       sumOrder.forEach((item) => {
-        const key = `${item.containerVolume}-${item.products.id}`;
+        const key = `${item.containerVolume}-${item.products._id}`;
         if (summedItems[key]) {
-          summedItems[key].summ += item.summ;
+          console.log(summedItems[key].summ);
+          summedItems[key].summ = +summedItems[key].summ + +item.summ;
         } else {
           summedItems[key] = { ...item };
         }
@@ -236,12 +247,28 @@ export default {
         this.isLoader = false;
       }
     },
+    async fetchAddViews() {
+      try {
+        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/views/add`;
+        const response = await axios.post(urlStr, {
+          token: this.token,
+          productID: this.$route.query.flavoringId,
+        });
+      } catch (err) {
+        console.log(err);
+      } finally {
+      }
+    },
   },
   computed: {},
-  // const currentParams = { ...this.$route.query };
+
   mounted() {
     this.$nextTick(async function () {
-      // https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/actions
+      this.token = JSON.parse(localStorage.getItem(`token`));
+      if (this.token) {
+        this.fetchAddViews();
+      }
+
       const currentParams = { ...this.$route.query };
       this.fetchGetProduct(currentParams.flavoringId);
       if (currentParams.sectionName) {

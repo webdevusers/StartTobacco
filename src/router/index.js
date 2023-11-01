@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/homepage.vue";
-import allCategories from "../views/AllCategories.vue";
+// import allCategories from "../views/AllCategories.vue";
 import SubC from "../views/Subcategory.vue";
 import Flavoring from "../views/Flavoring.vue";
 import PlacingAnOrder from "../views/PlacingAnOrder.vue";
@@ -29,11 +29,11 @@ const router = createRouter({
       name: "personalInformation",
       component: UsersPersonalInformation,
     },
-    {
-      path: "/allCategories",
-      name: "allCategories",
-      component: allCategories,
-    },
+    // {
+    //   path: "/allCategories",
+    //   name: "allCategories",
+    //   component: allCategories,
+    // },
     {
       path: "/subcategory",
       name: "subcategory",

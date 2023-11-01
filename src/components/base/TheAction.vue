@@ -24,39 +24,40 @@
           </div>
         </div>
         <div class="action-personal">
-          <div
+          <button
             class="action-personal-item"
-            @click="regContent = !regContent"
+            @click="getUser"
             style="cursor: pointer"
           >
             <img src="/icons/personal.svg" alt="" />
-          </div>
-          <div class="action-personal-item">
-            <router-link to="#">
-              <img src="/icons/liked.svg" alt="" />
-            </router-link>
-          </div>
-          <div
+          </button>
+          <button class="action-personal-item" @click="goToFlavoring">
+            <img src="/icons/liked.svg" alt="" />
+          </button>
+          <button
             class="action-personal-item"
             @click="cartContent = !cartContent"
             style="cursor: pointer"
           >
             <img src="/icons/cart.svg" alt="" />
-          </div>
+          </button>
         </div>
       </div>
 
       <div class="action-bottom">
         <div class="action-bottom-items">
-          <template v-for="(item, idx) in categories" :key="idx">
+          <template v-for="(item, idx) in categories" :key="item._id">
             <div class="action-bottom-item" @mouseleave="showCategory = ''">
               <div
                 class="action-bottom-name"
                 @mouseenter="showCategory = item.title"
               >
-                <div class="action-bottom-name__title">
+                <a
+                  class="action-bottom-name__title"
+                  @click.prevent="getUserCategory(item)"
+                >
                   {{ item.title }}
-                </div>
+                </a>
                 <div
                   class="action-bottom-name__icon"
                   v-if="item?.sections.length > 0"
@@ -75,7 +76,7 @@
                         <a
                           v-for="itm in item.sections"
                           :key="itm._id"
-                          @click.prevent="getUserNavigation(itm)"
+                          @click.prevent="getUserSectinId(itm)"
                         >
                           <div class="action-bottom-subcategories__text">
                             {{ itm.sectionName }}
@@ -91,17 +92,25 @@
         </div>
       </div>
     </div>
-    <regModal
-      v-if="regContent"
-      @modal="(regContent = !regContent), (authContent = true)"
-      v-model:regContent="regContent"
-    />
-    <authModal
-      v-if="authContent"
-      @modal="(authContent = !authContent), (regContent = true)"
-      v-model:authContent="authContent"
-    />
-
+    <div class="" v-if="!user">
+      <regModal
+        v-if="regContent"
+        @modal="(regContent = !regContent), (authContent = true)"
+        v-model:regContent="regContent"
+      />
+      <authModal
+        v-if="authContent"
+        @modal="(authContent = !authContent), (regContent = true)"
+        v-model:authContent="authContent"
+      />
+    </div>
+    <div class="" v-else>
+      <user-modal
+        @modal="userContent = !userContent"
+        v-model:userContent="userContent"
+        v-if="userContent"
+      />
+    </div>
     <cart v-if="cartContent" @cart="cartContent = !cartContent" />
   </div>
 </template>
@@ -110,6 +119,7 @@ import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/20/solid";
 import regModal from "./authComponents/regModal.vue";
 import authModal from "./authComponents/authModal.vue";
+import userModal from "./authComponents/userModal.vue";
 import cart from "./cart.vue";
 import axios from "axios";
 </script>
@@ -122,9 +132,11 @@ export default {
       regContent: false,
       authContent: false,
       cartContent: false,
+      userContent: false,
       isOpen: false,
       products: [],
       categories: [],
+      user: [],
     };
   },
   components: {
@@ -133,16 +145,38 @@ export default {
     MenuItems,
     MenuItem,
     ChevronDownIcon,
+    userModal,
   },
   methods: {
     clearCategory() {
       this.showCategory = null;
     },
-    getUserNavigation(item) {
+    getUserSectinId(item) {
       this.$router.push({
         path: `/subcategory/`,
         query: { categoryId: item.category, sectinId: item._id },
       });
+    },
+    getUserCategory(item) {
+      this.$router.push({
+        path: `/subcategory/`,
+        query: { categoryId: item._id },
+      });
+    },
+    getUser() {
+      this.regContent = true;
+      this.userContent = true;
+    },
+    goToFlavoring(item) {
+      if (this.user?.name == undefined) {
+        this.regContent = true;
+        this.userContent = true;
+      } else {
+        this.$router.push({
+          path: `/personal-information`,
+          query: { navigation: "chosen" },
+        });
+      }
     },
   },
   mounted() {
@@ -159,7 +193,25 @@ export default {
           throw error;
         });
       this.categories = response;
+      // console.log(this.categories);
     });
+  },
+  watch: {
+    regContent(newValue) {
+      setTimeout(() => {
+        this.user = JSON.parse(localStorage.getItem(`user`));
+      }, 2000);
+    },
+    authContent(newValue) {
+      setTimeout(() => {
+        this.user = JSON.parse(localStorage.getItem(`user`));
+      }, 2000);
+    },
+  },
+  async created() {
+    this.user = await JSON.parse(localStorage.getItem(`user`));
+    if (this.user?.name == undefined) {
+    }
   },
 };
 </script>
@@ -178,8 +230,14 @@ export default {
   &-top {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    @media (max-width: 570px) {
+      // margin-top: 30px;
+      row-gap: 30px;
+      // order: 3;
+    }
   }
 
   &-categories {
@@ -192,6 +250,10 @@ export default {
     flex-direction: row;
     align-items: center;
 
+    @media (max-width: 765px) {
+      max-width: 130px;
+    }
+
     &-icon {
       max-width: 24px;
       width: 100%;
@@ -201,11 +263,20 @@ export default {
       }
 
       margin-right: 15px;
+      @media (max-width: 570px) {
+        margin-right: 0;
+      }
     }
 
     &-title {
       font-family: tobacco;
-
+      font-size: 15px;
+      @media (max-width: 765px) {
+        font-size: 9px;
+      }
+      @media (max-width: 570px) {
+        display: none;
+      }
       a {
         color: white;
         text-decoration: none;
@@ -220,20 +291,30 @@ export default {
     flex-direction: row;
     align-items: center;
 
+    @media (max-width: 570px) {
+      // margin-top: 30px;
+      row-gap: 30px;
+      // order: 3;
+    }
     &-input {
       input {
         border-radius: 5px 0px 0px 5px;
         width: 545px;
+
         padding: 8px 12px;
         border: none;
-
         &:focus {
           outline: none;
           border: none;
         }
-
         @media (max-width: 1220px) {
-          width: 480px;
+          max-width: 545px;
+        }
+        @media (max-width: 970px) {
+          max-width: 250px;
+        }
+        @media (max-width: 570px) {
+          max-width: 150px;
         }
       }
     }
@@ -265,14 +346,22 @@ export default {
   &-bottom {
     // position: relative;
     margin-top: 34px;
+    @media (max-width: 570px) {
+      padding: 0 28px;
+    }
     &-items {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      flex-wrap: wrap;
+      @media (max-width: 1040px) {
+        column-gap: 10px;
+        row-gap: 15px;
+      }
     }
     // position: relative;
     &-item {
-      margin-right: 30px;
+      // margin-right: 30px;
       user-select: none;
 
       @media (max-width: 1220px) {

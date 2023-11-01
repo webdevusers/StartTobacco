@@ -7,26 +7,26 @@
       <div class="registration-contract__right">
         <form action="#" class="form" method="POST" @submit.prevent>
           <base-input
-            class="form__contact"
-            v-model="name"
+            :class="[isErrorUser ? 'shake--transition' : '', 'form__contact']"
+            v-model="user.name"
             type="text"
             placeholder="Введіть ім&#039;я"
           />
           <base-input
-            class="form__contact"
-            v-model="surname"
+            :class="[isErrorUser ? 'shake--transition' : '', 'form__contact']"
+            v-model="user.surname"
             type="text"
             placeholder="Введіть фамілію"
           />
           <base-input
-            class="form__contact"
-            v-model="phone"
+            :class="[isErrorUser ? 'shake--transition' : '', 'form__contact']"
+            v-model="user.phone"
             type="text"
             placeholder="Моб.телефон"
           />
           <base-input
-            class="form__contact"
-            v-model="email"
+            :class="[isErrorUser ? 'shake--transition' : '', 'form__contact']"
+            v-model="user.email"
             type="text"
             placeholder="Електронна пошта"
           />
@@ -43,13 +43,14 @@
           v-bind:options="allCityDelivery"
         />
         <base-input-whith-search
+          v-bind:isError="isError"
           v-model:modelValue="numberDelivery"
           v-bind:options="allNumberDelivery"
         />
         <button
           type="submit"
           class="form__button form__button--confirm"
-          @click.stop=""
+          @click.stop="receiveOrderConfirmation('delivery')"
         >
           Підтверджую замовлення
         </button>
@@ -71,7 +72,12 @@
             <div class="check__summa-title">До сплати</div>
             <div class="check__summa-text">{{ getTheSum }} ₴</div>
           </div>
-          <div class="check__button">Підтверджую замовлення</div>
+          <button
+            class="check__button"
+            @click.stop="receiveOrderConfirmation('delivery')"
+          >
+            Підтверджую замовлення
+          </button>
         </div>
       </div>
     </div>
@@ -79,7 +85,7 @@
     <div class="user-request__list" v-for="item in products" :key="item.id">
       <button
         class="user-request__cancel"
-        @click="deleteProduct(item.products.id)"
+        @click="deleteProduct(item.products._id)"
       >
         <img src="../../public/images/cancel.png" alt="" />
       </button>
@@ -88,7 +94,8 @@
       <div class="user-request__col">{{ getCol(item) }}</div>
       <div class="user-request__summ">{{ getSum(item) }}₴</div>
     </div>
-    <div class="type-of-delivery">
+
+    <div class="type-of-delivery" ref="delivery">
       <div class="type-of-delivery__left">
         <div class="type-of-delivery__title">Доставка</div>
         <div class="radio-group">
@@ -226,23 +233,40 @@
         <div class="check__summa-title">До сплати</div>
         <div class="check__summa-text">{{ getTheSum }} ₴</div>
       </div>
-      <div class="check__button">Підтверджую замовлення</div>
+      <div
+        class="check__button"
+        @click.stop="receiveOrderConfirmation('delivery')"
+      >
+        Підтверджую замовлення
+      </div>
     </div>
   </div>
+
+  <regModal
+    v-if="regContent"
+    @modal="(regContent = !regContent), (authContent = true)"
+    v-model:regContent="regContent"
+  />
+  <authModal
+    v-if="authContent"
+    @modal="(authContent = !authContent), (regContent = true)"
+    v-model:authContent="authContent"
+  />
 </template>
 
 <script>
 import BaseSelectWhithButton from "@/components/UI/BaseSelectWhithButton.vue";
 import BaseInputWhithSearch from "@/components/UI/BaseInputWhithSearch.vue";
 import BaseInput from "../components/UI/BaseInput.vue";
+import regModal from "../components/base/authComponents/regModal.vue";
+import authModal from "../components/base/authComponents/authModal.vue";
+import axios from "axios";
 
 export default {
   data() {
     return {
-      name: "",
-      surname: "",
-      phone: "",
-      email: "",
+      regContent: false,
+      authContent: false,
       cityDelivery: "",
       vidilNP: "",
       allCityDelivery: [
@@ -298,7 +322,6 @@ export default {
         { id: 23, name: "№34" },
         { id: 24, name: "№44" },
       ],
-
       typeDelivery: "",
       payNow: "",
       cardInput: "",
@@ -308,12 +331,18 @@ export default {
       cvvCard: null,
       cvvInput: "",
       products: [],
+      user: [],
+      isError: false,
+      isErrorUser: false,
+      token: "",
     };
   },
   components: {
     BaseInput,
     BaseSelectWhithButton,
     BaseInputWhithSearch,
+    regModal,
+    authModal,
   },
   computed: {
     getTheSumOfTheQuantityOfGoods() {
@@ -336,12 +365,60 @@ export default {
   },
   methods: {
     async submitForm() {
-      if (!this.name || !this.surname || !this.phone || !this.email) {
-        return console.log("please login");
+      if (
+        !this.user.name ||
+        !this.user.surname ||
+        !this.user.phone ||
+        !this.user.email
+      ) {
+        this.regContent = true;
+      } else {
+        await this.fetchUpdatedData();
       }
       //Отправляем данные на сервер
     },
-
+    async fetchUpdatedData() {
+      try {
+        // this.isLoader = true;
+        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/edit`;
+        const response = await axios.post(urlStr, {
+          id: this.user._id,
+          updatedData: {
+            name: this.user.name,
+            surname: this.user.surname,
+            email: this.user.email,
+            phone: this.user.phone,
+          },
+        });
+        if (response.data.edited) {
+          localStorage.setItem(`user`, JSON.stringify(this.user));
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        // this.isLoader = false;
+      }
+    },
+    async fetchAddOrder() {
+      try {
+        this.isLoader = true;
+        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/addOrder`;
+        const response = await axios.post(urlStr, {
+          token: this.token,
+          Object: {
+            timeOrder: Date.now(),
+            order: [...this.products],
+          },
+        });
+        if (response.data.edited) {
+          localStorage.setItem(`user`, JSON.stringify(this.user));
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.isLoader = false;
+      }
+    },
     getCol(item) {
       return `${this.indentInThousands(item?.products.newPrice)} ₴ х ${
         item.summ
@@ -351,7 +428,11 @@ export default {
       return this.indentInThousands(+item?.products.newPrice * +item.summ);
     },
     deleteProduct(id) {
-      this.products = [...this.products].filter((item) => item.id != id);
+      console.log(id);
+      this.products = [...this.products].filter(
+        (item) => item.products._id != id
+      );
+      console.log(this.products);
     },
     getCardInput(e) {
       if (this.numberCard.length > 15) {
@@ -389,9 +470,65 @@ export default {
       }
       this.cvvCard = this.cvvCard.replace(/\D/g, "");
     },
+    receiveOrderConfirmation(refName) {
+      if (
+        this.user.name == false ||
+        this.user.surname == false ||
+        this.user.email == false ||
+        this.user.phone == false
+      ) {
+        this.isErrorUser = true;
+      } else if (this.numberDelivery == false) {
+        this.isError = true;
+      } else if (this.typeDelivery == false || this.payNow == false) {
+        var element = this.$refs[refName];
+        var top = element.offsetTop;
+        window.scrollTo(0, top);
+      } else {
+        this.fetchAddOrder();
+        // /addOrder id, productID
+      }
+    },
   },
-  created() {
+  watch: {
+    isError(newValue) {
+      if (newValue == true) {
+        setTimeout(() => {
+          this.isError = false;
+        }, 3000);
+      }
+    },
+    isErrorUser(newValue) {
+      if (newValue == true) {
+        setTimeout(() => {
+          this.isErrorUser = false;
+        }, 3000);
+      }
+    },
+    regContent(newValue) {
+      setTimeout(() => {
+        this.user = JSON.parse(localStorage.getItem(`user`));
+        if (this.user?.name == undefined) {
+          this.user = { name: "", surname: "", phone: "", email: "" };
+        }
+      }, 2000);
+    },
+    authContent(newValue) {
+      setTimeout(() => {
+        this.user = JSON.parse(localStorage.getItem(`user`));
+        if (this.user?.name == undefined) {
+          this.user = { name: "", surname: "", phone: "", email: "" };
+        }
+      }, 2000);
+    },
+  },
+  mounted() {
     this.products = JSON.parse(localStorage.getItem(`order`));
+    this.user = JSON.parse(localStorage.getItem(`user`));
+    if (this.user?.name == undefined) {
+      this.user = { name: "", surname: "", phone: "", email: "" };
+    }
+    this.token = JSON.parse(localStorage.getItem(`token`));
   },
 };
 </script>
@@ -399,6 +536,23 @@ export default {
 <style lang="scss" scoped>
 input {
   outline: none;
+}
+.shake--transition {
+  animation: shake 0.2s 4;
+  @keyframes shake {
+    0%,
+    100% {
+      translate: 0;
+    }
+
+    25% {
+      translate: 8px 0;
+    }
+
+    75% {
+      translate: -8px 0;
+    }
+  }
 }
 .container {
   box-sizing: border-box;

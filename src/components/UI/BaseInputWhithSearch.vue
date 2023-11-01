@@ -1,5 +1,5 @@
 <template>
-  <Combobox v-model="selected">
+  <Combobox v-model="selected" :class="[isError ? 'shake--transition' : '']">
     <div class="combobox">
       <div class="combobox__block-input">
         <ComboboxInput
@@ -85,6 +85,10 @@ export default {
       type: Array,
       required: false,
     },
+    isError: {
+      type: Boolean,
+      required: false,
+    },
   },
   computed: {
     filteredOptions() {
@@ -115,6 +119,23 @@ export default {
 <style lang="scss" scoped>
 input {
   outline: none;
+}
+.shake--transition {
+  animation: shake 0.2s 4;
+  @keyframes shake {
+    0%,
+    100% {
+      translate: 0;
+    }
+
+    25% {
+      translate: 8px 0;
+    }
+
+    75% {
+      translate: -8px 0;
+    }
+  }
 }
 .combobox {
   position: relative;

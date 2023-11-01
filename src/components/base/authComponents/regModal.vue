@@ -1,53 +1,68 @@
 <template>
-  <div class="content">
-    <div class="content-text">
-      <div class="content-text__title">Ласкаво просимо!</div>
-      <div class="content-text__desc">Створіть свій особистий кабінет</div>
-      <div class="content-text__error" v-if="isError">заповніть всі поля</div>
-    </div>
-    <div class="content-form">
-      <div class="content-form__logo">
-        <img src="/images/logo.png" alt="" />
+  <div class="background" @click="hideModal">
+    <div class="content" @click.stop>
+      <div class="content-text">
+        <div class="content-text__title">Ласкаво просимо!</div>
+        <div class="content-text__desc">Створіть свій особистий кабінет</div>
+        <div class="content-text__error" v-if="isError">заповніть всі поля</div>
       </div>
-      <div class="content-form__items">
-        <div class="content-form__items-item">
-          <input type="text" placeholder="Повне ім'я" v-model="name" required />
+      <div class="content-form">
+        <div class="content-form__logo">
+          <img src="/images/logo.png" alt="" />
         </div>
-        <div class="content-form__items-item">
-          <input type="text" placeholder="E-mai" v-model="email" required />
+        <div class="content-form__items">
+          <div class="content-form__items-item">
+            <input
+              type="text"
+              placeholder="Повне ім'я"
+              v-model="name"
+              required
+            />
+          </div>
+          <div class="content-form__items-item">
+            <input
+              type="text"
+              placeholder="Прізвище"
+              v-model="surname"
+              required
+            />
+          </div>
+          <div class="content-form__items-item">
+            <input type="text" placeholder="E-mai" v-model="email" required />
+          </div>
+          <div class="content-form__items-item">
+            <input
+              type="text"
+              placeholder="Моб. телефон"
+              v-model="phone"
+              required
+            />
+          </div>
+          <div class="content-form__items-item">
+            <input
+              type="password"
+              placeholder="Пароль"
+              v-model="password"
+              required
+            />
+          </div>
+          <div class="content-form__items-item">
+            <input
+              type="password"
+              placeholder="Підтвердити пароль"
+              v-model="passwordConfirm"
+              required
+            />
+          </div>
         </div>
-        <div class="content-form__items-item">
-          <input
-            type="text"
-            placeholder="Моб. телефон"
-            v-model="phone"
-            required
-          />
+        <div class="content-form__button" @click="handleAuth">Створити</div>
+        <div
+          class="content-form__text"
+          @click="this.$emit('modal', modal)"
+          style="cursor: pointer"
+        >
+          Увійти у наявний аккаунт
         </div>
-        <div class="content-form__items-item">
-          <input
-            type="password"
-            placeholder="Пароль"
-            v-model="password"
-            required
-          />
-        </div>
-        <div class="content-form__items-item">
-          <input
-            type="password"
-            placeholder="Підтвердити пароль"
-            v-model="passwordConfirm"
-            required
-          />
-        </div>
-      </div>
-      <div class="content-form__button" @click="handleAuth">Створити</div>
-      <div
-        class="content-form__text"
-        @click="this.$emit('modal', modal)"
-        style="cursor: pointer"
-      >
-        Увійти у наявний аккаунт
       </div>
     </div>
   </div>
@@ -60,6 +75,7 @@ export default {
   data() {
     return {
       name: "",
+      surname: "",
       email: "",
       phone: "",
       password: "",
@@ -70,7 +86,9 @@ export default {
     };
   },
   props: {
-    regContent: Boolean,
+    regContent: {
+      type: Boolean,
+    },
   },
   methods: {
     async fetchRegistration() {
@@ -78,26 +96,47 @@ export default {
         this.isLoader = true;
         let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/registration`;
         const response = await axios.post(urlStr, {
-          fullName: this.name,
+          name: this.name,
+          surname: this.surname,
           email: this.email,
           phone: this.phone,
           password: this.password,
         });
         this.user = response.data;
         localStorage.setItem(`user`, JSON.stringify(this.user));
+        this.fetchAuthorizationToken();
       } catch (err) {
         console.log(err);
       } finally {
         this.isLoader = false;
       }
     },
+    async fetchAuthorizationToken() {
+      try {
+        this.isLoader = true;
+        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/authorization`;
+        const response = await axios.post(urlStr, {
+          email: this.email,
+          password: this.password,
+        });
+        this.token = response.data.token;
+        localStorage.setItem(`token`, JSON.stringify(this.token));
+        // this.fetchAuthorizationGet(response.data.token);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.isLoader = false;
+      }
+    },
+    hideModal() {
+      this.$emit("update:regContent", false);
+    },
     handleAuth() {
       if (!this.name && !this.email && !this.phone && !this.password) {
         this.isError = true;
       } else {
         this.fetchRegistration();
-
-        this.$emit("update:regContent", false);
+        this.hideModal();
       }
     },
   },
@@ -114,25 +153,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.content {
+.background {
+  z-index: 20;
   position: fixed;
-  z-index: 12;
-  left: 50%;
-  top: 55%;
-
-  transform: translate(-50%, -50%);
-
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.content {
   display: grid;
   grid-gap: 50px;
   grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 570px) {
+    grid-gap: 0;
+    grid-template-columns: 10%, 1fr;
+  }
 
+  box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.2);
   padding: 50px 100px;
-  background: #ffffff;
-
-  align-items: center;
-
+  background: white;
   border-radius: 5px;
+  min-width: 250px;
 
+  @media (max-width: 765px) {
+    padding: 40px;
+  }
+  @media (max-width: 570px) {
+    padding: 20px;
+  }
   &-text {
     &__title {
       padding-top: 40px;
@@ -140,12 +194,18 @@ export default {
       font-size: 32px;
       color: #00000060;
       margin-bottom: 30px;
+      @media (max-width: 570px) {
+        font-size: 16px;
+      }
     }
 
     &__desc {
       font-family: tobacco;
       font-size: 24px;
       max-width: 200px;
+      @media (max-width: 570px) {
+        font-size: 15px;
+      }
     }
     &__error {
       color: #ca0808;
@@ -172,6 +232,9 @@ export default {
           outline: none;
           width: 320px;
           padding: 10px 16px;
+          @media (max-width: 570px) {
+            width: 100%;
+          }
         }
       }
     }

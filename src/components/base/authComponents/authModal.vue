@@ -1,33 +1,35 @@
 <template>
-  <div class="content">
-    <div class="content-text">
-      <div class="content-text__title">Ласкаво просимо!</div>
-      <div class="content-text__desc">Увійдіть в свій особистий кабінет</div>
-    </div>
-    <div class="content-form">
-      <div class="content-form__logo">
-        <img src="/images/logo.png" alt="" />
+  <div class="background" @click="hideModal">
+    <div class="content" @click.stop>
+      <div class="content-text">
+        <div class="content-text__title">Ласкаво просимо!</div>
+        <div class="content-text__desc">Увійдіть в свій особистий кабінет</div>
       </div>
-      <div class="content-form__items">
-        <div class="content-form__items-item">
-          <input type="text" placeholder="E-mai" v-model="email" required />
+      <div class="content-form">
+        <div class="content-form__logo">
+          <img src="/images/logo.png" alt="" />
         </div>
-        <div class="content-form__items-item">
-          <input
-            type="password"
-            placeholder="Пароль"
-            v-model="password"
-            required
-          />
+        <div class="content-form__items">
+          <div class="content-form__items-item">
+            <input type="text" placeholder="E-mai" v-model="email" required />
+          </div>
+          <div class="content-form__items-item">
+            <input
+              type="password"
+              placeholder="Пароль"
+              v-model="password"
+              required
+            />
+          </div>
         </div>
-      </div>
-      <div class="content-form__button" @click="handleAuth">Увійти</div>
-      <div
-        class="content-form__text"
-        @click="this.$emit('modal', modal)"
-        style="cursor: pointer"
-      >
-        Створити аккаунт
+        <div class="content-form__button" @click="handleAuth">Увійти</div>
+        <div
+          class="content-form__text"
+          @click="this.$emit('modal', modal)"
+          style="cursor: pointer"
+        >
+          Створити аккаунт
+        </div>
       </div>
     </div>
   </div>
@@ -45,6 +47,11 @@ export default {
       user: "",
     };
   },
+  props: {
+    authContent: {
+      type: Boolean,
+    },
+  },
   methods: {
     async fetchAuthorizationToken() {
       try {
@@ -55,6 +62,7 @@ export default {
           password: this.password,
         });
         this.token = response.data.token;
+        localStorage.setItem(`token`, JSON.stringify(this.token));
         this.fetchAuthorizationGet(response.data.token);
       } catch (err) {
         console.log(err);
@@ -78,12 +86,15 @@ export default {
         this.isLoader = false;
       }
     },
+    hideModal() {
+      this.$emit("update:authContent", false);
+    },
     handleAuth() {
       if (!this.email && !this.password) {
         this.isError = true;
       } else {
         this.fetchAuthorizationToken();
-        this.$emit("update:authContent", false);
+        this.hideModal();
       }
 
       // Создание аккаунта
@@ -93,25 +104,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.content {
+.background {
+  z-index: 20;
   position: fixed;
-  z-index: 12;
-  left: 50%;
-  top: 55%;
-
-  transform: translate(-50%, -50%);
-
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.content {
   display: grid;
   grid-gap: 50px;
   grid-template-columns: repeat(2, 1fr);
-
+  @media (max-width: 570px) {
+    grid-template-columns: 10%, 1fr;
+  }
+  box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.2);
   padding: 50px 100px;
-  background: #ffffff;
-
-  align-items: center;
-
+  background: white;
   border-radius: 5px;
-
+  min-width: 250px;
+  // text-align: center;
+  @media (max-width: 765px) {
+    padding: 40px;
+  }
+  @media (max-width: 570px) {
+    padding: 20px;
+  }
   &-text {
     &__title {
       padding-top: 40px;
@@ -119,12 +143,18 @@ export default {
       font-size: 32px;
       color: #00000060;
       margin-bottom: 30px;
+      @media (max-width: 570px) {
+        font-size: 16px;
+      }
     }
 
     &__desc {
       font-family: tobacco;
       font-size: 24px;
       max-width: 200px;
+      @media (max-width: 570px) {
+        font-size: 15px;
+      }
     }
   }
 
@@ -148,6 +178,9 @@ export default {
           outline: none;
           width: 320px;
           padding: 10px 16px;
+          @media (max-width: 570px) {
+            width: 100%;
+          }
         }
       }
     }

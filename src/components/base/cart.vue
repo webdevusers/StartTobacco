@@ -1,61 +1,46 @@
 <template>
-  <div class="cart">
-    <div class="cart-content">
-      <ul class="items-list">
-        <li v-for="item in itemsCart" :key="item.id">
-          <div class="item-remove" @click="deleteItem(item.id)">
-            <img src="/icons/delete.svg" alt="" />
-          </div>
-          <div class="item-img">
-            <img :src="item.products.imageUrl" alt="" />
-          </div>
-          <div class="item-name">
-            {{ item.products.title }}
-          </div>
-          <div class="item-price">{{ item.price }}₴</div>
-          <div class="item-count">
-            <p @click="removeCount(item.id)" v-if="item.summ > 0">-</p>
-            <input type="number" v-model="item.summ" />
-            <p @click="addCount(item.id)">+</p>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="cart-buttons">
-      <button class="cart-buttons-item gray" @click="this.$emit('cart', cart)">
-        Продовжити покупки
-      </button>
-      <div class="cart-buttons-item yellow">
-        <div class="cart-buttons-item__price">2 999 <span>₴</span></div>
-        <button class="cart-buttons-item-btn" @click="goToOrders">
-          Оформити замовлення
-        </button>
+  <div class="background" @click="hideModal">
+    <div class="cart" @click.stop>
+      <div class="cart-content">
+        <ul class="items-list">
+          <li
+            v-for="item in itemsCart"
+            :key="`${item.products._id} + ${item.containerVolume}`"
+          >
+            <div class="item-remove" @click="deleteItem(item.products._id)">
+              <img src="/icons/delete.svg" alt="" />
+            </div>
+            <div class="item-img">
+              <img :src="item.products.imageUrl" alt="" />
+            </div>
+            <div class="item-name">
+              {{ item.products.title }}
+            </div>
+            <div class="item-price">{{ item.products.newPrice }}₴</div>
+            <div class="item-count">
+              <button @click="removeCount(item)" v-if="item.summ > 0">-</button>
+              <div class="input">{{ item.summ }}</div>
+              <button @click="addCount(item)">+</button>
+            </div>
+          </li>
+        </ul>
       </div>
-    </div>
-    <div class="cart-close" @click="this.$emit('cart', cart)">
-      <svg
-        width="32px"
-        height="32px"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g
-          id="SVGRepo_tracerCarrier"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
-        <g id="SVGRepo_iconCarrier">
-          <path
-            d="M19 5L5 19M5 5L9.5 9.5M12 12L19 19"
-            stroke="#000000"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-        </g>
-      </svg>
+      <div class="cart-buttons">
+        <button
+          class="cart-buttons-item gray"
+          @click="this.$emit('cart', cart)"
+        >
+          Продовжити покупки
+        </button>
+        <div class="cart-buttons-item yellow">
+          <div class="cart-buttons-item__price">
+            {{ getTheSum }} <span>₴</span>
+          </div>
+          <button class="cart-buttons-item-btn" @click="goToOrders">
+            Оформити замовлення
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -66,11 +51,15 @@ export default {
       itemIds: [{ id: "1" }, { id: "2" }],
       cart: true,
       itemsCart: [],
+      foo: 5,
     };
   },
   methods: {
-    goToOrders(item) {
+    hideModal() {
       this.$emit("cart", this.cart);
+    },
+    goToOrders(item) {
+      this.hideModal();
       this.$router.push({
         path: `/user-orders/`,
       });
@@ -80,48 +69,100 @@ export default {
         responce = this.itemsCart;
       });
     },
-    removeCount(id) {
-      const item = this.itemsCart.find((item) => item.id === id);
-      if (item) {
-        item.count -= 1;
-      } else {
-        console.log("Элемент не найден");
-      }
+    removeCount(point) {
+      this.itemsCart = [...this.itemsCart].filter((item) =>
+        item.products._id === point.products._id &&
+        item.containerVolume === point.containerVolume
+          ? +item.summ--
+          : item
+      );
     },
-    addCount(id) {
-      const item = this.itemsCart.find((item) => item.id === id);
-
-      if (item) {
-        item.count += 1;
-      } else {
-        console.log("Элемент не найден");
-      }
+    getSumm(event) {
+      // item.summ = event.target.value;
+      console.log(event);
+      // this.itemsCart = [...this.itemsCart].filter((item) =>
+      //   item.products._id === point.products._id &&
+      //   item.containerVolume === point.containerVolume
+      //     ? +item.summ++
+      //     : item
+      // );
+    },
+    addCount(point) {
+      this.itemsCart = [...this.itemsCart].filter((item) =>
+        item.products._id === point.products._id &&
+        item.containerVolume === point.containerVolume
+          ? +item.summ++
+          : item
+      );
     },
     deleteItem(id) {
-      const index = this.itemsCart.findIndex((item) => item.id === id);
+      this.itemsCart = [...this.itemsCart].filter(
+        (item) => item.products._id != id
+      );
+    },
+  },
+  computed: {
+    getTheSum() {
+      let summ = [...this.itemsCart]
+        .reduce((acc, val) => (acc += +val.summ * +val.products.newPrice), 0)
+        .toString();
 
-      if (index !== -1) {
-        this.itemsCart.splice(index, 1);
-      }
+      return summ
+        .split("")
+        .reverse()
+        .join("")
+        .replace(/(\d{3})/g, "$1 ")
+        .split("")
+        .reverse()
+        .join("");
+    },
+  },
+  watch: {
+    itemsCart(newValue) {
+      localStorage.setItem(`order`, JSON.stringify(newValue));
     },
   },
   mounted() {
     this.itemsCart = JSON.parse(localStorage.getItem(`order`));
-    console.log(this.itemsCart);
   },
 };
 </script>
 <style lang="scss" scoped>
-.cart {
-  z-index: 13;
+.background {
+  z-index: 20;
   position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cart {
+  // z-index: 13;
+  // position: fixed;
+  // left: 50%;
+  // top: 50%;
+  // transform: translate(-50%, -50%);
 
+  // background: white;
+  // border-radius: 5px;
+  // padding: 50px 100px;
+  box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.2);
+  padding: 50px 100px;
   background: white;
   border-radius: 5px;
-  padding: 50px 100px;
+  min-width: 250px;
+  text-align: center;
+  @media (max-width: 765px) {
+    padding: 40px;
+  }
+  @media (max-width: 570px) {
+    padding: 20px;
+  }
   &-close {
     cursor: pointer;
     position: absolute;
@@ -205,16 +246,18 @@ export default {
       cursor: pointer;
     }
 
-    input {
+    .input {
       width: 50px;
-      height: 25px;
+      // height: 25px;
       font-size: 18px;
       font-family: tobacco;
       border-radius: 3px;
       border: 1px solid rgba(0, 0, 0, 0.5);
       background: rgba(216, 216, 216, 0.4);
       text-align: center;
-      padding-left: 5px;
+      padding: 1px 5px;
+      margin-left: 5px;
+      margin-right: 5px;
     }
   }
 
