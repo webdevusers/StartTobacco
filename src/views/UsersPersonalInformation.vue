@@ -41,8 +41,10 @@
 
       <div class="personal-information__right">
         <div v-if="getItem[0].href == 'my-orders'">
-          <div class="personal-information__first-title">Мої замовлення</div>
-          <div class="personal-information__first">
+          <div class="personal-information__first-title" v-if="myOrder">
+            Мої замовлення
+          </div>
+          <div class="personal-information__first" v-if="myOrder">
             <template v-for="item in myOrder">
               <div class="card">
                 <button class="like" @click="likedProduct(item)">
@@ -157,6 +159,7 @@
           <div class="personal-information__first-title">
             Переглянуті товари
           </div>
+
           <div class="personal-information__first">
             <template v-for="item in views">
               <div class="card">
@@ -321,7 +324,9 @@ export default {
           token: token,
         });
         this.user = response.data.user;
-
+        this.fetchGetLiked();
+        this.fetchGetViews();
+        this.fetchGetCart();
         localStorage.setItem(`user`, JSON.stringify(this.user));
       } catch (err) {
         console.log(err);
@@ -451,6 +456,9 @@ export default {
     line-height: normal;
     margin-top: 60px;
     margin-bottom: 30px;
+    @media (max-width: 570px) {
+      font-size: 12px;
+    }
   }
   &__second-title {
     font-size: 24px;

@@ -7,26 +7,38 @@
       <div class="registration-contract__right">
         <form action="#" class="form" method="POST" @submit.prevent>
           <base-input
-            :class="[isErrorUser ? 'shake--transition' : '', 'form__contact']"
-            v-model="user.name"
+            :class="[
+              v$.user.name.$error ? 'errors-color shake--transition' : '',
+              'form__contact',
+            ]"
+            v-model="v$.user.name.$model"
             type="text"
             placeholder="Введіть ім&#039;я"
           />
           <base-input
-            :class="[isErrorUser ? 'shake--transition' : '', 'form__contact']"
-            v-model="user.surname"
+            :class="[
+              v$.user.surname.$error ? 'errors-color shake--transition' : '',
+              'form__contact',
+            ]"
+            v-model="v$.user.surname.$model"
             type="text"
             placeholder="Введіть фамілію"
           />
           <base-input
-            :class="[isErrorUser ? 'shake--transition' : '', 'form__contact']"
-            v-model="user.phone"
+            :class="[
+              v$.user.phone.$error ? ' errors-color shake--transition' : '',
+              'form__contact',
+            ]"
+            v-model="v$.user.phone.$model"
             type="text"
             placeholder="Моб.телефон"
           />
           <base-input
-            :class="[isErrorUser ? 'shake--transition' : '', 'form__contact']"
-            v-model="user.email"
+            :class="[
+              v$.user.email.$error ? ' errors-color shake--transition' : '',
+              'form__contact',
+            ]"
+            v-model="v$.user.email.$model"
             type="text"
             placeholder="Електронна пошта"
           />
@@ -260,11 +272,14 @@ import BaseInputWhithSearch from "@/components/UI/BaseInputWhithSearch.vue";
 import BaseInput from "../components/UI/BaseInput.vue";
 import regModal from "../components/base/authComponents/regModal.vue";
 import authModal from "../components/base/authComponents/authModal.vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required, email, minLength } from "@vuelidate/validators";
 import axios from "axios";
 
 export default {
   data() {
     return {
+      v$: useVuelidate(),
       regContent: false,
       authContent: false,
       cityDelivery: "",
@@ -333,7 +348,6 @@ export default {
       products: [],
       user: [],
       isError: false,
-      isErrorUser: false,
       token: "",
     };
   },
@@ -372,10 +386,13 @@ export default {
         !this.user.email
       ) {
         this.regContent = true;
+      } else if (this.v$.$invalid) {
+        console.log(this.v$.$invalid);
+        this.v$.$touch();
+        return;
       } else {
         await this.fetchUpdatedData();
       }
-      //Отправляем данные на сервер
     },
     async fetchUpdatedData() {
       try {
@@ -471,13 +488,8 @@ export default {
       this.cvvCard = this.cvvCard.replace(/\D/g, "");
     },
     receiveOrderConfirmation(refName) {
-      if (
-        this.user.name == false ||
-        this.user.surname == false ||
-        this.user.email == false ||
-        this.user.phone == false
-      ) {
-        this.isErrorUser = true;
+      if (this.v$.$invalid) {
+        this.v$.$touch();
       } else if (this.numberDelivery == false) {
         this.isError = true;
       } else if (this.typeDelivery == false || this.payNow == false) {
@@ -486,22 +498,26 @@ export default {
         window.scrollTo(0, top);
       } else {
         this.fetchAddOrder();
-        // /addOrder id, productID
+        this.products = [];
+        localStorage.removeItem(`order`);
       }
     },
+  },
+  validations() {
+    return {
+      user: {
+        name: { required, minLength: minLength(3) },
+        surname: { required, minLength: minLength(3) },
+        email: { required, email },
+        phone: { required },
+      },
+    };
   },
   watch: {
     isError(newValue) {
       if (newValue == true) {
         setTimeout(() => {
           this.isError = false;
-        }, 3000);
-      }
-    },
-    isErrorUser(newValue) {
-      if (newValue == true) {
-        setTimeout(() => {
-          this.isErrorUser = false;
         }, 3000);
       }
     },
@@ -553,6 +569,9 @@ input {
       translate: -8px 0;
     }
   }
+}
+.errors-color {
+  border: 1px solid red;
 }
 .container {
   box-sizing: border-box;

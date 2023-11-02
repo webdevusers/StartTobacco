@@ -8,7 +8,7 @@
             <img src="/icons/burger-menu.svg" alt="" />
           </div>
           <div class="action-categories-title">
-            <router-link to="/allcategories">Топ категорій</router-link>
+            <router-link to="/">Топ категорій</router-link>
           </div>
         </div>
         <div class="action-categories mobile-version" @click="isMenu = !isMenu">
@@ -16,7 +16,7 @@
             <img src="/icons/burger-menu.svg" alt="" />
           </div>
           <div class="action-categories-title">
-            <router-link to="/allcategories">Категорії</router-link>
+            <a>Категорії</a>
           </div>
         </div>
         <div class="action-search">
@@ -122,7 +122,14 @@
     <cart v-if="cartContent" @cart="cartContent = !cartContent" />
     <div class="menu-mobile" v-if="isMenu" @click="isMenu = false">
       <div class="menu-mobile-bottom" @click.stop>
+        <nav class="header-links">
+          <a href="/" class="header-link-item">Головна</a>
+          <a href="/" class="header-link-item">Про нас</a>
+          <a href="/" class="header-link-item">Контакти</a>
+          <a href="/" class="header-link-item">Співпраця</a>
+        </nav>
         <div class="menu-mobile-bottom-items">
+          <div class="menu-mobile-bottom__title">Усі категорії</div>
           <template v-for="(item, idx) in categories" :key="item._id">
             <div
               class="menu-mobile-bottom-item"
@@ -194,6 +201,34 @@
               <img src="/icons/cart.svg" alt="" />
               <div class="menu-mobile-personal-btn-title">Кошик</div>
             </button>
+          </div>
+        </div>
+        <div class="contacts">
+          <div class="contacts__title">Контакти</div>
+          <div class="contacts__item">
+            <img
+              class="contacts__icon"
+              src="../../../public/images/phone.png"
+            />
+            <a class="contacts__text">+380 (99) XXX XX XX</a>
+          </div>
+          <div class="contacts__item">
+            <img class="contacts__icon" src="../../../public/images/mail.png" />
+            <a class="contacts__text">email@email.com</a>
+          </div>
+          <div class="contacts__item">
+            <img
+              class="contacts__icon"
+              src="../../../public/images/telegram.png"
+            />
+            <a class="contacts__text">Telegram</a>
+          </div>
+          <div class="contacts__item">
+            <img
+              class="contacts__icon"
+              src="../../../public/images/whatsapp.png"
+            />
+            <a class="contacts__text">Whatsapp</a>
           </div>
         </div>
       </div>
@@ -308,6 +343,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.contacts {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 10px;
+  &__title {
+    margin: 0 auto;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  &__item {
+    display: flex;
+    align-items: center;
+    padding: 5px 20px;
+  }
+  &__icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+  }
+}
+.header-links {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 10px;
+
+  a {
+    padding: 5px 20px;
+  }
+}
 .action {
   background: #292929;
   position: relative;
@@ -457,6 +521,7 @@ export default {
         row-gap: 15px;
       }
     }
+
     &-item {
       user-select: none;
 
@@ -529,8 +594,7 @@ export default {
     display: flex;
     z-index: 100;
     flex-direction: column;
-  }
-  .menu-mobile {
+
     &-bottom {
       position: absolute;
       top: 0;
@@ -540,17 +604,16 @@ export default {
       background: #ffffff;
       box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.2);
       &-items {
-        // display: flex;
-        // flex-direction: column;
-        // flex-direction: row;
-        // justify-content: space-between;
-        // flex-wrap: wrap;
-
-        padding: 20px 10px;
+        margin: 20px 10px;
         @media (max-width: 1040px) {
           column-gap: 10px;
           row-gap: 15px;
         }
+      }
+      &__title {
+        text-align: center;
+        font-size: 18px;
+        font-weight: 700;
       }
       &-item {
         padding: 10px 20px;

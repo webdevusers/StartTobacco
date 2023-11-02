@@ -4,7 +4,6 @@
       <div class="content-text">
         <div class="content-text__title">Ласкаво просимо!</div>
         <div class="content-text__desc">Створіть свій особистий кабінет</div>
-        <div class="content-text__error" v-if="isError">заповніть всі поля</div>
       </div>
       <div class="content-form">
         <div class="content-form__logo">
@@ -13,44 +12,73 @@
         <div class="content-form__items">
           <div class="content-form__items-item">
             <input
+              :class="[
+                v$.name.$error ? 'error-color' : '',
+                'content-form__items-item-input',
+              ]"
               type="text"
               placeholder="Повне ім'я"
-              v-model="name"
+              v-model="v$.name.$model"
               required
             />
           </div>
           <div class="content-form__items-item">
             <input
+              :class="[
+                v$.surname.$error ? 'error-color' : '',
+                'content-form__items-item-input',
+              ]"
               type="text"
               placeholder="Прізвище"
-              v-model="surname"
+              v-model="v$.surname.$model"
               required
             />
           </div>
           <div class="content-form__items-item">
-            <input type="text" placeholder="E-mai" v-model="email" required />
+            <input
+              :class="[
+                v$.email.$error ? 'error-color' : '',
+                'content-form__items-item-input',
+              ]"
+              type="text"
+              placeholder="E-mai"
+              v-model="v$.email.$model"
+              required
+            />
           </div>
           <div class="content-form__items-item">
             <input
+              :class="[
+                v$.phone.$error ? 'error-color' : '',
+                'content-form__items-item-input',
+              ]"
               type="text"
               placeholder="Моб. телефон"
-              v-model="phone"
+              v-model="v$.phone.$model"
               required
             />
           </div>
           <div class="content-form__items-item">
             <input
+              :class="[
+                v$.password.$error ? 'error-color' : '',
+                'content-form__items-item-input',
+              ]"
               type="password"
               placeholder="Пароль"
-              v-model="password"
+              v-model="v$.password.$model"
               required
             />
           </div>
           <div class="content-form__items-item">
             <input
+              :class="[
+                v$.passwordConfirm.$error ? 'error-color' : '',
+                'content-form__items-item-input',
+              ]"
               type="password"
               placeholder="Підтвердити пароль"
-              v-model="passwordConfirm"
+              v-model="v$.passwordConfirm.$model"
               required
             />
           </div>
@@ -69,11 +97,14 @@
 </template>
 
 <script>
+import { useVuelidate } from "@vuelidate/core";
+import { required, email, minLength, sameAs } from "@vuelidate/validators";
 import axios from "axios";
 
 export default {
   data() {
     return {
+      v$: useVuelidate(),
       name: "",
       surname: "",
       email: "",
@@ -82,7 +113,6 @@ export default {
       passwordConfirm: "",
       modal: true,
       user: {},
-      isError: false,
     };
   },
   props: {
@@ -132,23 +162,25 @@ export default {
       this.$emit("update:regContent", false);
     },
     handleAuth() {
-      if (!this.name && !this.email && !this.phone && !this.password) {
-        this.isError = true;
-      } else {
-        this.fetchRegistration();
-        this.hideModal();
+      if (this.v$.$invalid) {
+        this.v$.$touch();
+        return;
       }
+      this.fetchRegistration();
+      this.hideModal();
     },
   },
-  watch: {
-    isError(newValue) {
-      if (newValue == true) {
-        setTimeout(() => {
-          this.isError = false;
-        }, 3000);
-      }
-    },
+  validations() {
+    return {
+      name: { required, minLength: minLength(3) },
+      surname: { required, minLength: minLength(3) },
+      email: { required, email },
+      phone: { required, minLength: minLength(10) },
+      password: { required, minLength: minLength(3) },
+      passwordConfirm: { required, sameAs: sameAs(this.password) },
+    };
   },
+  watch: {},
 };
 </script>
 
@@ -166,6 +198,7 @@ export default {
   justify-content: center;
   align-items: center;
 }
+
 .content {
   display: grid;
   grid-gap: 50px;
@@ -221,14 +254,13 @@ export default {
       &-item {
         margin-bottom: 10px;
 
-        input {
+        &-input {
           font-family: tobacco;
           font-size: 14px;
-
           border-radius: 3px;
           background: #fff;
           box-shadow: 0px 4px 27px -3px rgba(0, 0, 0, 0.25);
-          border: none;
+          border: transparent;
           outline: none;
           width: 320px;
           padding: 10px 16px;
@@ -265,5 +297,8 @@ export default {
       text-decoration-line: underline;
     }
   }
+}
+.error-color {
+  border: 1px solid red;
 }
 </style>

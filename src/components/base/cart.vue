@@ -77,16 +77,7 @@ export default {
           : item
       );
     },
-    getSumm(event) {
-      // item.summ = event.target.value;
-      console.log(event);
-      // this.itemsCart = [...this.itemsCart].filter((item) =>
-      //   item.products._id === point.products._id &&
-      //   item.containerVolume === point.containerVolume
-      //     ? +item.summ++
-      //     : item
-      // );
-    },
+
     addCount(point) {
       this.itemsCart = [...this.itemsCart].filter((item) =>
         item.products._id === point.products._id &&
