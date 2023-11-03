@@ -457,6 +457,7 @@ export default {
     margin-top: 60px;
     margin-bottom: 30px;
     @media (max-width: 570px) {
+      margin-top: 0;
       font-size: 12px;
     }
   }
@@ -617,8 +618,8 @@ export default {
     align-items: center;
     margin-bottom: 27px;
     @media (max-width: 570px) {
-      width: 67px;
-      height: 67px;
+      width: 67px !important;
+      height: 67px !important;
       margin-left: auto;
       margin-right: auto;
     }
@@ -634,7 +635,7 @@ export default {
     line-height: normal;
     letter-spacing: 0.28px;
     @media (max-width: 570px) {
-      font-size: 0.5em;
+      font-size: 0.5em !important;
     }
   }
   &-liked {
@@ -654,7 +655,7 @@ export default {
     margin-bottom: 12px;
     user-select: none;
     @media (max-width: 570px) {
-      font-size: 0.5rem;
+      font-size: 0.5rem !important;
     }
   }
 
@@ -691,7 +692,7 @@ export default {
     letter-spacing: 0.48px;
     padding-bottom: 20.5px;
     @media (max-width: 570px) {
-      font-size: 0.75rem;
+      font-size: 0.75rem !important;
     }
   }
 }

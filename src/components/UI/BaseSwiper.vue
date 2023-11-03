@@ -200,7 +200,7 @@ export default {
   position: relative;
   max-width: 250px;
   @media (max-width: 570px) {
-    width: 150px;
+    width: 280px;
   }
 }
 .like {

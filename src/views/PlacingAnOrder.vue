@@ -1030,7 +1030,7 @@ input {
   &__props--gap {
     margin-right: 50px;
     @media (max-width: 570px) {
-      margin-right: 40px;
+      margin-right: 17.5px;
     }
   }
   &__input--cvv {

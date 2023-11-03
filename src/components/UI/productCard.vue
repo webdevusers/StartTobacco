@@ -143,7 +143,7 @@ export default {
 
 .product-card {
   z-index: -1;
-  max-width: 250px;
+  width: 250px;
   position: relative;
   border-radius: 10px;
   background: #fff;
@@ -152,7 +152,9 @@ export default {
   box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.2);
   user-select: none;
   cursor: pointer;
-
+  @media (max-width: 570px) {
+    width: 280px;
+  }
   &-info {
     padding: 0 16px;
   }

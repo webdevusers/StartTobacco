@@ -267,15 +267,16 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .category {
   margin-bottom: 64px;
   .card {
     display: flex;
     position: relative;
-    max-width: 250px;
+    width: 250px;
     @media (max-width: 570px) {
-      width: 150px;
+      width: 280px;
+      justify-content: center;
     }
   }
   .like {
@@ -284,6 +285,9 @@ export default {
     top: 17.5px;
     right: 17.5px;
     z-index: 5;
+    @media (max-width: 570px) {
+      right: 40px;
+    }
   }
   &__wrap {
     padding: 64px 0;
@@ -308,12 +312,15 @@ export default {
     flex-wrap: wrap;
     column-gap: 30px;
     row-gap: 45px;
+    @media (max-width: 570px) {
+      justify-content: center;
+    }
   }
   &__item {
-    // margin-right: 30px;
-    // margin-bottom: 45px;
-    column-gap: 30px;
-    row-gap: 45px;
+    margin-right: 30px;
+    margin-bottom: 45px;
+    // column-gap: 30px;
+    // row-gap: 45px;
   }
 }
 </style>

@@ -103,19 +103,19 @@ a {
   user-select: none;
   cursor: pointer;
   @media (max-width: 570px) {
-    width: 150px;
+    width: 280px;
   }
   &-img {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 27px;
-    @media (max-width: 570px) {
-      width: 67px;
-      height: 67px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+    // @media (max-width: 570px) {
+    //   width: 67px;
+    //   height: 67px;
+    //   margin-left: auto;
+    //   margin-right: auto;
+    // }
   }
 
   &-info {
