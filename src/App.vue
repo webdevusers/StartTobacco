@@ -12,10 +12,21 @@ import TheFooter from "./components/base/TheFooter.vue";
   <TheFooter />
 </template>
 <style lang="scss">
+.card {
+  max-height: 500px;
+}
+
+.category__list[data-v-c4f3cd76] {
+  column-gap: 43px;
+  row-gap: 79px;
+}
+
 @import "./app.css";
+
 a {
   text-decoration: none;
 }
+
 .swiper-pagination-bullet {
   width: 38px !important;
   height: 8px !important;
@@ -102,9 +113,11 @@ a {
   box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.2);
   user-select: none;
   cursor: pointer;
+
   @media (max-width: 570px) {
     width: 280px;
   }
+
   &-img {
     display: flex;
     justify-content: center;
@@ -121,16 +134,19 @@ a {
   &-info {
     padding: 0 16px;
   }
+
   &__void {
     font-size: 0.875rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
     letter-spacing: 0.28px;
+
     @media (max-width: 570px) {
       font-size: 0.5em;
     }
   }
+
   &-liked {
     cursor: pointer;
     position: absolute;
@@ -147,6 +163,7 @@ a {
     line-height: normal;
     margin-bottom: 12px;
     user-select: none;
+
     @media (max-width: 570px) {
       font-size: 0.5rem;
     }
@@ -170,6 +187,7 @@ a {
     font-weight: 400;
     letter-spacing: 0.32px;
     margin-right: 10px;
+
     @media (max-width: 570px) {
       font-size: 0.5em;
     }
@@ -184,6 +202,7 @@ a {
     line-height: normal;
     letter-spacing: 0.48px;
     padding-bottom: 20.5px;
+
     @media (max-width: 570px) {
       font-size: 0.75rem;
     }

@@ -65,8 +65,9 @@ export default {
     align-items: center;
     width: 100%;
     @media (max-width: 570px) {
-      display: grid;
-      grid-template-columns: 60% 1fr;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
     }
     @media (max-width: 968px) {
       margin: 0 auto;
@@ -77,7 +78,7 @@ export default {
         max-width: 545px;
         padding: 12.5px 12px;
         border: none;
-
+        width: 545px;
         &:focus {
           outline: none;
           border: none;
@@ -103,11 +104,12 @@ export default {
       user-select: none;
       font-family: tobacco;
       font-size: 15px;
+      text-align: center;
       @media (max-width: 510px) {
         padding: 13px 10px;
       }
       @media (max-width: 570px) {
-        //   max-width: 250px;
+        max-width: 120px;
         width: 100%;
       }
       @media screen {

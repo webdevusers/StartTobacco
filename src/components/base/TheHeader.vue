@@ -6,12 +6,11 @@
           <img src="/images/logo.png" alt="" />
         </div>
       </router-link>
-      <div class="header-flex">
         <nav class="header-links">
-          <router-link to="#">Головна</router-link>
-          <router-link to="#">Про нас</router-link>
-          <router-link to="#">Контакти</router-link>
-          <router-link to="#">Співпраця</router-link>
+          <router-link to="/">Головна</router-link>
+          <router-link to="/about">Про нас</router-link>
+          <router-link to="/contacts">Контакти</router-link>
+          <router-link to="/cooperation">Співпраця</router-link>
         </nav>
         <div class="header-time">
           <div class="header-time-icon">
@@ -23,7 +22,6 @@
           </div>
         </div>
       </div>
-    </div>
   </header>
 </template>
 
@@ -40,8 +38,12 @@ export default {};
     align-items: center;
     justify-content: space-between;
     padding-bottom: 20px;
+
     @media (max-width: 765px) {
       // flex-direction: column;
+    }
+    @media (max-width: 970px) {
+      justify-content: center;
     }
   }
 
@@ -67,6 +69,7 @@ export default {};
 
       user-select: none;
     }
+
     // @media (max-width: 765px) {
     //   display: flex;
     //   justify-content: center;
@@ -76,9 +79,11 @@ export default {};
       display: none;
     }
   }
+
   &-box {
     position: absolute;
   }
+
   &-time {
     display: flex;
     flex-direction: row;
@@ -86,10 +91,12 @@ export default {};
     user-select: none;
     position: relative;
     flex-wrap: wrap;
+
     &-icon {
       width: 20px;
       height: 20px;
     }
+
     // @media (max-width: 765px) {
     //   display: none;
     // }
@@ -97,11 +104,13 @@ export default {};
       margin-left: 10px;
       font-family: tobacco;
       font-size: 16px;
-      @media (max-width: 765px) {
-        font-size: 12px;
-      }
+    }
+
+    @media (max-width: 970px) {
+      display: none;
     }
   }
+
   &-flex {
     display: flex;
     flex-wrap: wrap;

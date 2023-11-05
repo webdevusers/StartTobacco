@@ -6,64 +6,31 @@
     <div class="registration-contract">
       <div class="registration-contract__right">
         <form action="#" class="form" method="POST" @submit.prevent>
-          <base-input
-            :class="[
-              v$.user.name.$error ? 'errors-color shake--transition' : '',
-              'form__contact',
-            ]"
-            v-model="v$.user.name.$model"
-            type="text"
-            placeholder="Введіть ім&#039;я"
-          />
-          <base-input
-            :class="[
-              v$.user.surname.$error ? 'errors-color shake--transition' : '',
-              'form__contact',
-            ]"
-            v-model="v$.user.surname.$model"
-            type="text"
-            placeholder="Введіть фамілію"
-          />
-          <base-input
-            :class="[
-              v$.user.phone.$error ? ' errors-color shake--transition' : '',
-              'form__contact',
-            ]"
-            v-model="v$.user.phone.$model"
-            type="text"
-            placeholder="Моб.телефон"
-          />
-          <base-input
-            :class="[
-              v$.user.email.$error ? ' errors-color shake--transition' : '',
-              'form__contact',
-            ]"
-            v-model="v$.user.email.$model"
-            type="text"
-            placeholder="Електронна пошта"
-          />
-          <button
-            type="submit"
-            class="form__button form__button--save"
-            @click.stop="submitForm"
-          >
+          <base-input :class="[
+            v$.user.name.$error ? 'errors-color shake--transition' : '',
+            'form__contact',
+          ]" v-model="v$.user.name.$model" type="text" placeholder="Введіть ім&#039;я" />
+          <base-input :class="[
+            v$.user.surname.$error ? 'errors-color shake--transition' : '',
+            'form__contact',
+          ]" v-model="v$.user.surname.$model" type="text" placeholder="Введіть фамілію" />
+          <base-input :class="[
+            v$.user.phone.$error ? ' errors-color shake--transition' : '',
+            'form__contact',
+          ]" v-model="v$.user.phone.$model" type="text" placeholder="Моб.телефон" />
+          <base-input :class="[
+            v$.user.email.$error ? ' errors-color shake--transition' : '',
+            'form__contact',
+          ]" v-model="v$.user.email.$model" type="text" placeholder="Електронна пошта" />
+          <button type="submit" class="form__button form__button--save" @click.stop="submitForm">
             Зберегти
           </button>
         </form>
-        <base-select-whith-button
-          v-model:modelValue="cityDelivery"
-          v-bind:options="allCityDelivery"
-        />
-        <base-input-whith-search
-          v-bind:isError="isError"
-          v-model:modelValue="numberDelivery"
-          v-bind:options="allNumberDelivery"
-        />
-        <button
-          type="submit"
-          class="form__button form__button--confirm"
-          @click.stop="receiveOrderConfirmation('delivery')"
-        >
+        <base-select-whith-button v-model:modelValue="cityDelivery" v-bind:options="allCityDelivery" />
+        <base-input-whith-search v-bind:isError="isError" v-model:modelValue="numberDelivery"
+          v-bind:options="allNumberDelivery" />
+        <button type="submit" class="form__button form__button--confirm"
+          @click.stop="receiveOrderConfirmation('delivery')">
           Підтверджую замовлення
         </button>
       </div>
@@ -84,10 +51,7 @@
             <div class="check__summa-title">До сплати</div>
             <div class="check__summa-text">{{ getTheSum }} ₴</div>
           </div>
-          <button
-            class="check__button"
-            @click.stop="receiveOrderConfirmation('delivery')"
-          >
+          <button class="check__button" @click.stop="receiveOrderConfirmation('delivery')">
             Підтверджую замовлення
           </button>
         </div>
@@ -95,10 +59,7 @@
     </div>
     <div class="user-request__title">Ваше замовлення</div>
     <div class="user-request__list" v-for="item in products" :key="item.id">
-      <button
-        class="user-request__cancel"
-        @click="deleteProduct(item.products._id)"
-      >
+      <button class="user-request__cancel" @click="deleteProduct(item.products._id)">
         <img src="../../public/images/cancel.png" alt="" />
       </button>
       <img :src="item.products.imageUrl" alt="" class="user-request__img" />
@@ -111,53 +72,29 @@
       <div class="type-of-delivery__left">
         <div class="type-of-delivery__title">Доставка</div>
         <div class="radio-group">
-          <input
-            class="radio-input"
-            name="radio-group"
-            id="radio1"
-            type="radio"
-            value="Доставка Нова Пошта"
-            v-model="typeDelivery"
-          />
+          <input class="radio-input" name="radio-group" id="radio1" type="radio" value="Доставка Нова Пошта"
+            v-model="typeDelivery" />
           <label class="radio-label" for="radio1">
             <span class="radio-inner-circle"></span>
             Доставка Нова Пошта
           </label>
 
-          <input
-            class="radio-input"
-            name="radio-group"
-            id="radio2"
-            type="radio"
-            value="Самовивіз НоваПошта"
-            v-model="typeDelivery"
-          />
+          <input class="radio-input" name="radio-group" id="radio2" type="radio" value="Самовивіз НоваПошта"
+            v-model="typeDelivery" />
           <label class="radio-label" for="radio2">
             <span class="radio-inner-circle"></span>
             Самовивіз НоваПошта
           </label>
 
-          <input
-            class="radio-input"
-            name="radio-group"
-            id="radio3"
-            type="radio"
-            value="Самовивіз УкрПошта"
-            v-model="typeDelivery"
-          />
+          <input class="radio-input" name="radio-group" id="radio3" type="radio" value="Самовивіз УкрПошта"
+            v-model="typeDelivery" />
           <label class="radio-label" for="radio3">
             <span class="radio-inner-circle"></span>
             Самовивіз УкрПошта
           </label>
 
-          <input
-            class="radio-input"
-            name="radio-group"
-            id="radio4"
-            type="radio"
-            value="Доставка УкрПошта"
-            v-model="typeDelivery"
-          />
+          <input class="radio-input" name="radio-group" id="radio4" type="radio" value="Доставка УкрПошта"
+            v-model="typeDelivery" />
           <label class="radio-label" for="radio4">
             <span class="radio-inner-circle"></span>
             Доставка УкрПошта
@@ -168,27 +105,15 @@
         <div class="type-of-delivery__title">Оплата</div>
 
         <div class="radio-group__right">
-          <input
-            class="radio-input"
-            name="radio-group__right"
-            id="radio1__right"
-            type="radio"
-            value="false"
-            v-model="payNow"
-          />
+          <input class="radio-input" name="radio-group__right" id="radio1__right" type="radio" value="false"
+            v-model="payNow" />
           <label class="radio-label" for="radio1__right">
             <span class="radio-inner-circle"></span>
             Оплата при отриманні
           </label>
 
-          <input
-            class="radio-input"
-            name="radio-group__right"
-            id="radio2__right"
-            type="radio"
-            value="true"
-            v-model="payNow"
-          />
+          <input class="radio-input" name="radio-group__right" id="radio2__right" type="radio" value="true"
+            v-model="payNow" />
           <label class="radio-label" for="radio2__right">
             <span class="radio-inner-circle"></span>
             Оплатити зараз
@@ -196,34 +121,19 @@
         </div>
         <div class="pay" v-if="payNow == 'true'">
           <div class="pay__title">Номер карти</div>
-          <input
-            class="pay__input pay__input--card"
-            v-model="numberCard"
-            type="text"
-            @input="getCardInput"
-            ref="cardInput"
-          />
+          <input class="pay__input pay__input--card" v-model="numberCard" type="text" @input="getCardInput"
+            ref="cardInput" />
 
           <div class="pay__props">
             <div class="pay__props--gap">
               <div class="pay__title">Термін дії</div>
-              <input
-                class="pay__input pay__input--term"
-                v-model="termCard"
-                type="text"
-                @input="getTermInput"
-                ref="termInput"
-              />
+              <input class="pay__input pay__input--term" v-model="termCard" type="text" @input="getTermInput"
+                ref="termInput" />
             </div>
             <div class="">
               <div class="pay__title">CVV</div>
-              <input
-                class="pay__input pay__input--cvv"
-                v-model="cvvCard"
-                type="text"
-                @input="getCvvInput"
-                ref="cvvInput"
-              />
+              <input class="pay__input pay__input--cvv" v-model="cvvCard" type="text" @input="getCvvInput"
+                ref="cvvInput" />
             </div>
           </div>
         </div>
@@ -245,25 +155,15 @@
         <div class="check__summa-title">До сплати</div>
         <div class="check__summa-text">{{ getTheSum }} ₴</div>
       </div>
-      <div
-        class="check__button"
-        @click.stop="receiveOrderConfirmation('delivery')"
-      >
+      <div class="check__button" @click.stop="receiveOrderConfirmation('delivery')">
         Підтверджую замовлення
       </div>
     </div>
   </div>
 
-  <regModal
-    v-if="regContent"
-    @modal="(regContent = !regContent), (authContent = true)"
-    v-model:regContent="regContent"
-  />
-  <authModal
-    v-if="authContent"
-    @modal="(authContent = !authContent), (regContent = true)"
-    v-model:authContent="authContent"
-  />
+  <regModal v-if="regContent" @modal="(regContent = !regContent), (authContent = true)" v-model:regContent="regContent" />
+  <authModal v-if="authContent" @modal="(authContent = !authContent), (regContent = true)"
+    v-model:authContent="authContent" />
 </template>
 
 <script>
@@ -378,6 +278,24 @@ export default {
     },
   },
   methods: {
+    sendMessage() {
+      const token = '6700460046:AAHX2VEGlAkcmhXh2_S2zLvk_whH1eKghZU';
+      const chatId = '@asdopklasdpkoaspodop';
+      const message = 'Ваше сообщение здесь';
+
+      const apiUrl = `https://api.telegram.org/bot${token}/sendMessage`;
+
+      axios.post(apiUrl, {
+        chat_id: chatId,
+        text: message,
+      })
+        .then(response => {
+          console.log('Сообщение успешно отправлено:', response.data);
+        })
+        .catch(error => {
+          console.error('Ошибка при отправке сообщения:', error.response.data);
+        });
+    },
     async submitForm() {
       if (
         !this.user.name ||
@@ -437,9 +355,8 @@ export default {
       }
     },
     getCol(item) {
-      return `${this.indentInThousands(item?.products.newPrice)} ₴ х ${
-        item.summ
-      } од.`;
+      return `${this.indentInThousands(item?.products.newPrice)} ₴ х ${item.summ
+        } од.`;
     },
     getSum(item) {
       return this.indentInThousands(+item?.products.newPrice * +item.summ);
@@ -553,9 +470,12 @@ export default {
 input {
   outline: none;
 }
+
 .shake--transition {
   animation: shake 0.2s 4;
+
   @keyframes shake {
+
     0%,
     100% {
       translate: 0;
@@ -570,39 +490,48 @@ input {
     }
   }
 }
+
 .errors-color {
   border: 1px solid red;
 }
+
 .container {
   box-sizing: border-box;
   font-family: "tobacco";
   max-width: 1220px;
   margin: 66px auto 90px;
   padding: 0 10px;
+
   @media screen and (max-width: 1040px) {
     margin: 45px auto 90px;
   }
+
   @media screen and (max-width: 570px) {
     width: 100%;
     margin: 12px auto 90px;
     padding: 0 28px;
   }
 }
+
 .title {
   font-size: 26px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+
   @media screen and (max-width: 570px) {
     font-size: 1.2em;
   }
+
   &--basket {
     display: none;
+
     @media screen and (max-width: 1040px) {
       font-size: 26px;
       display: block;
       margin-bottom: 30px;
     }
+
     @media screen and (max-width: 570px) {
       display: block;
       font-size: 1.2em;
@@ -610,33 +539,40 @@ input {
     }
   }
 }
+
 .contact {
   margin-top: 35px;
   font-size: 22px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+
   @media screen and (max-width: 570px) {
     font-size: 1rem;
   }
 }
+
 .registration-contract {
   display: flex;
   justify-content: space-between;
-  &__right {
-  }
+
+  &__right {}
+
   &__left {
     width: 365px;
     height: 406px;
+
     @media (max-width: 765px) {
       display: none;
     }
   }
+
   @media (max-width: 765px) {
     display: flex;
     flex-direction: column;
   }
 }
+
 .form {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -644,20 +580,24 @@ input {
   row-gap: 25px;
   margin-top: 24px;
   margin-bottom: 54px;
+
   @media (max-width: 765px) {
     width: 100%;
     gap: 15px;
     margin-top: 15px;
     margin-bottom: 25px;
   }
+
   @media screen and (max-width: 570px) {
     display: flex;
     flex-direction: column;
     width: 100%;
   }
+
   &__contact {
     width: 100%;
   }
+
   &__button {
     background: #efca00;
     border-radius: 7px;
@@ -668,15 +608,19 @@ input {
     font-weight: 400;
     line-height: normal;
     border: none;
+
     &--save {
       width: 152px;
     }
+
     &--confirm {
       margin-bottom: 100px;
+
       @media screen and (max-width: 570px) {
         margin-bottom: 25px;
       }
     }
+
     @media screen and (max-width: 570px) {
       font-size: 0.875rem;
       padding: 8px 17px;
@@ -694,15 +638,19 @@ input {
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: #fff;
   box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.2);
+
   @media (max-width: 765px) {
     width: 60%;
   }
+
   @media (max-width: 570px) {
     width: 70%;
   }
+
   @media (max-width: 375px) {
     width: 80%;
   }
+
   &__title {
     color: #000;
     font-size: 24px;
@@ -710,19 +658,23 @@ input {
     font-weight: 600;
     line-height: normal;
     margin-bottom: 13px;
+
     @media (max-width: 570px) {
       font-size: 1rem;
     }
   }
+
   &__col,
   &__summa,
   &__delivery {
     display: flex;
     justify-content: space-between;
   }
+
   &__delivery {
     margin: 26px 0 40px;
   }
+
   &__col-title,
   &__delivery-title {
     color: rgba(0, 0, 0, 0.6);
@@ -730,32 +682,40 @@ input {
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+
     @media (max-width: 570px) {
       font-size: 0.875rem;
     }
+
     @media (max-width: 375px) {
       font-size: 0.75rem;
     }
   }
+
   &__col-title {
     width: 145px;
   }
+
   &__delivery-title {
     width: 80px;
   }
+
   &__col-summ {
     color: rgba(0, 0, 0, 0.75);
     font-size: 20px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+
     @media (max-width: 570px) {
       font-size: 1rem;
     }
+
     @media (max-width: 375px) {
       font-size: 0.875rem;
     }
   }
+
   &__delivery-text {
     color: #000;
     font-size: 14px;
@@ -763,35 +723,43 @@ input {
     font-weight: 600;
     line-height: normal;
     text-align: end;
+
     @media (max-width: 375px) {
       font-size: 0.75rem;
     }
   }
+
   &__summa-title {
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+
     @media (max-width: 570px) {
       font-size: 0.875rem;
     }
+
     @media (max-width: 375px) {
       font-size: 0.75rem;
     }
   }
+
   &__summa-text {
     color: rgba(0, 0, 0, 0.75);
     font-size: 20px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+
     @media (max-width: 570px) {
       font-size: 1rem;
     }
+
     @media (max-width: 375px) {
       font-size: 0.875rem;
     }
   }
+
   &__button {
     border-radius: 7px;
     background: #efca00;
@@ -810,27 +778,33 @@ input {
       width: 80%;
       padding: 18px 25px;
     }
+
     @media (max-width: 570px) {
       width: 85%;
       padding: 15px 10px;
       margin: 45px auto;
       font-size: 0.75rem;
     }
+
     @media (max-width: 375px) {
       margin: 30px auto;
     }
   }
+
   @media (max-width: 765px) {
     display: none;
   }
+
   &--mobile {
     display: none;
+
     @media (max-width: 765px) {
       display: block;
       margin-top: 35px;
     }
   }
 }
+
 .user-request {
   &__title {
     color: #000;
@@ -839,47 +813,58 @@ input {
     font-weight: 600;
     line-height: normal;
     padding-bottom: 30px;
+
     @media screen and (max-width: 570px) {
       font-size: 0.875rem;
     }
   }
+
   &__list {
     display: flex;
     align-items: center;
     justify-content: space-between;
     max-width: 930px;
     padding-bottom: 50px;
+
     @media (max-width: 1040px) {
       width: 100%;
       padding-bottom: 40px;
     }
+
     @media (max-width: 570px) {
       padding-bottom: 20px;
     }
   }
+
   &__cancel {
     width: 32px;
     height: 32px;
+
     @media (max-width: 1040px) {
       width: 24px;
       height: 24px;
     }
+
     @media (max-width: 570px) {
       width: 12px;
       height: 12px;
     }
   }
+
   &__img {
     width: 116px;
     height: 116px;
+
     @media (max-width: 1040px) {
       max-width: 116px;
       max-height: 116px;
     }
+
     @media (max-width: 765px) {
       display: none;
     }
   }
+
   &__title-product {
     color: #000;
     font-size: 16px;
@@ -887,6 +872,7 @@ input {
     font-weight: 600;
     line-height: normal;
     max-width: 255px;
+
     @media (max-width: 765px) {
       font-size: 0.875rem;
     }
@@ -896,44 +882,53 @@ input {
       max-width: 135px;
     }
   }
+
   &__col {
     font-size: 20px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+
     @media (max-width: 765px) {
       font-size: 1.2em;
     }
+
     @media (max-width: 570px) {
       font-size: 0.75rem;
     }
   }
+
   &__summ {
     font-size: 20px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+
     @media (max-width: 765px) {
       font-size: 1.2em;
     }
+
     @media (max-width: 570px) {
       font-size: 0.75rem;
     }
   }
 }
+
 .type-of-delivery {
   display: flex;
   gap: 115px;
   margin-top: 50px;
-  &__left {
-  }
-  &__right {
-  }
+
+  &__left {}
+
+  &__right {}
+
   &__title {
     font-size: 1.5rem;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+
     @media (max-width: 570px) {
       font-size: 1rem;
     }
@@ -943,11 +938,13 @@ input {
     margin-top: 15px;
     gap: 35px;
   }
+
   @media (max-width: 765px) {
     flex-direction: column;
     gap: 70px;
   }
 }
+
 .radio-label {
   display: flex;
   align-items: center;
@@ -957,18 +954,22 @@ input {
   line-height: normal;
   letter-spacing: 0.4px;
   margin-top: 50px;
+
   @media (max-width: 1040px) {
     font-size: 1rem;
   }
+
   @media (max-width: 375px) {
     font-size: 0.875rem;
     margin-top: 28px;
   }
 }
+
 .radio-input {
   position: absolute;
   opacity: 0;
 }
+
 .radio-inner-circle {
   display: inline-block;
   width: 1em;
@@ -979,10 +980,12 @@ input {
   transition: border-color 0.2s;
   position: relative;
 }
-.radio-input:checked + .radio-label .radio-inner-circle {
+
+.radio-input:checked+.radio-label .radio-inner-circle {
   border-color: #000000;
 }
-.radio-input:checked + .radio-label .radio-inner-circle::after {
+
+.radio-input:checked+.radio-label .radio-inner-circle::after {
   content: "";
   display: block;
   width: 0.5em;
@@ -994,8 +997,10 @@ input {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .pay {
   margin-top: 40px;
+
   &__title {
     color: rgba(0, 0, 0, 0.5);
     font-size: 20px;
@@ -1003,13 +1008,16 @@ input {
     font-weight: 500;
     line-height: normal;
     letter-spacing: 0.4px;
+
     @media (max-width: 1040px) {
       font-size: 1rem;
     }
+
     @media (max-width: 375px) {
       font-size: 0.875rem;
     }
   }
+
   &__input {
     border-radius: 7px;
     border: 1px solid rgba(0, 0, 0, 0.5);
@@ -1020,37 +1028,48 @@ input {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+
     @media (max-width: 1040px) {
       font-size: 1rem;
     }
+
     @media (max-width: 375px) {
       font-size: 0.875rem;
     }
   }
+
   &__props--gap {
     margin-right: 50px;
+
     @media (max-width: 570px) {
       margin-right: 17.5px;
     }
   }
+
   &__input--cvv {
     width: 95px;
+
     @media (max-width: 570px) {
       width: 60px;
     }
   }
+
   &__input--term {
     width: 120px;
+
     @media (max-width: 570px) {
       width: 80px;
     }
   }
+
   &__input--card {
     width: 380px;
+
     @media (max-width: 570px) {
       width: 250px;
     }
   }
+
   &__props {
     display: flex;
     margin-top: 21px;

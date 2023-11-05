@@ -5,6 +5,9 @@ import SubC from "../views/Subcategory.vue";
 import Flavoring from "../views/Flavoring.vue";
 import PlacingAnOrder from "../views/PlacingAnOrder.vue";
 import UsersPersonalInformation from "../views/UsersPersonalInformation.vue";
+import About from '../views/About.vue'
+import cooperation from '../views/cooperation.vue'
+import Contacts from '../views/contacts.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +42,21 @@ const router = createRouter({
       name: "subcategory",
       component: SubC,
     },
+    {
+      path: '/about',
+      name: "About us",
+      component: About
+    },
+    {
+      path: '/cooperation',
+      name: 'cooperation',
+      component: cooperation
+    },
+    {
+      path: '/contacts',
+      name: 'contacts',
+      component: Contacts
+    }
   ],
 });
 

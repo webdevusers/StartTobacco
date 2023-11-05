@@ -70,12 +70,6 @@
               </svg>
             </div>
           </div>
-          <a class="reviews__voits" href="#">
-            <div class="reviews__icons">
-              <img src="../../public/images/comment.png" alt="" />
-            </div>
-            <div class="reviews__text">99+</div>
-          </a>
         </div>
         <div class="prises">
           <div class="prises__oldPrice" v-if="products?.oldPrice">
