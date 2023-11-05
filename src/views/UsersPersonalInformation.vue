@@ -46,7 +46,10 @@
           </div>
           <div class="personal-information__first" v-if="myOrder">
             <template v-for="item in myOrder">
-              <div class="card">
+              <div
+                class="card"
+                :style="{ opacity: item?.stock_quantity === 0 ? '.3' : '1' }"
+              >
                 <button class="like" @click="likedProduct(item)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +86,10 @@
           </div>
           <div class="personal-information__first">
             <template v-for="item in orderedProducts">
-              <div class="card">
+              <div
+                class="card"
+                :style="{ opacity: item?.stock_quantity === 0 ? '.3' : '1' }"
+              >
                 <button class="like" @click="likedProduct(item)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +126,10 @@
           <div class="personal-information__first-title">Обране</div>
           <div class="personal-information__first">
             <template v-for="item in likeProducts">
-              <div class="card">
+              <div
+                class="card"
+                :style="{ opacity: item?.stock_quantity === 0 ? '.3' : '1' }"
+              >
                 <button class="like" @click="likedProduct(item)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -162,7 +171,10 @@
 
           <div class="personal-information__first">
             <template v-for="item in views">
-              <div class="card">
+              <div
+                class="card"
+                :style="{ opacity: item?.stock_quantity === 0 ? '.3' : '1' }"
+              >
                 <button class="like" @click="likedProduct(item)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -257,7 +269,6 @@ export default {
         query: { flavoringId: item.id },
       });
     },
-    addToCart() {},
     getTheSum(item) {
       return item
         .toString()
@@ -385,6 +396,16 @@ export default {
     this.fetchGetLiked();
     this.fetchGetCart();
     this.fetchGetViews();
+  },
+  watch: {
+    $route(newValue) {
+      if (newValue.query.navigation == "chosen") {
+        this.fetchGetLiked();
+      }
+      if (newValue.query.navigation == "reviewed-products") {
+        this.fetchGetViews();
+      }
+    },
   },
   mounted() {
     let routerReview = this.$route.query.navigation;

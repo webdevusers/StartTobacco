@@ -13,7 +13,7 @@ import TheFooter from "./components/base/TheFooter.vue";
 </template>
 <style lang="scss">
 .card {
-  max-height: 500px;
+  // max-height: 500px;
 }
 
 .category__list[data-v-c4f3cd76] {
@@ -26,7 +26,10 @@ import TheFooter from "./components/base/TheFooter.vue";
 a {
   text-decoration: none;
 }
-
+#app {
+  overflow-x: hidden; /*для горизонтального*/
+  box-sizing: border-box;
+}
 .swiper-pagination-bullet {
   width: 38px !important;
   height: 8px !important;
@@ -85,7 +88,6 @@ a {
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 12px;
-
   &-count {
     display: flex;
     flex-direction: row;

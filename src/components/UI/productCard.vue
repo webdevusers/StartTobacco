@@ -120,7 +120,6 @@ export default {
   position: relative;
   border-radius: 10px;
   background: #fff;
-
   /* shadow for cards */
   box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.2);
   user-select: none;
@@ -152,9 +151,11 @@ export default {
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
-    line-height: normal;
     margin-bottom: 12px;
     user-select: none;
+    height: 2em;
+    line-height: 1em;
+    overflow: hidden;
   }
 
   &-discount {
@@ -175,6 +176,7 @@ export default {
     font-weight: 400;
     letter-spacing: 0.32px;
     margin-right: 10px;
+    text-decoration: line-through;
   }
 
   &-price {

@@ -6,31 +6,64 @@
     <div class="registration-contract">
       <div class="registration-contract__right">
         <form action="#" class="form" method="POST" @submit.prevent>
-          <base-input :class="[
-            v$.user.name.$error ? 'errors-color shake--transition' : '',
-            'form__contact',
-          ]" v-model="v$.user.name.$model" type="text" placeholder="Введіть ім&#039;я" />
-          <base-input :class="[
-            v$.user.surname.$error ? 'errors-color shake--transition' : '',
-            'form__contact',
-          ]" v-model="v$.user.surname.$model" type="text" placeholder="Введіть фамілію" />
-          <base-input :class="[
-            v$.user.phone.$error ? ' errors-color shake--transition' : '',
-            'form__contact',
-          ]" v-model="v$.user.phone.$model" type="text" placeholder="Моб.телефон" />
-          <base-input :class="[
-            v$.user.email.$error ? ' errors-color shake--transition' : '',
-            'form__contact',
-          ]" v-model="v$.user.email.$model" type="text" placeholder="Електронна пошта" />
-          <button type="submit" class="form__button form__button--save" @click.stop="submitForm">
+          <base-input
+            :class="[
+              v$.user.name.$error ? 'errors-color shake--transition' : '',
+              'form__contact',
+            ]"
+            v-model="v$.user.name.$model"
+            type="text"
+            placeholder="Введіть ім&#039;я"
+          />
+          <base-input
+            :class="[
+              v$.user.surname.$error ? 'errors-color shake--transition' : '',
+              'form__contact',
+            ]"
+            v-model="v$.user.surname.$model"
+            type="text"
+            placeholder="Введіть фамілію"
+          />
+          <base-input
+            :class="[
+              v$.user.phone.$error ? ' errors-color shake--transition' : '',
+              'form__contact',
+            ]"
+            v-model="v$.user.phone.$model"
+            type="text"
+            placeholder="Моб.телефон"
+          />
+          <base-input
+            :class="[
+              v$.user.email.$error ? ' errors-color shake--transition' : '',
+              'form__contact',
+            ]"
+            v-model="v$.user.email.$model"
+            type="text"
+            placeholder="Електронна пошта"
+          />
+          <button
+            type="submit"
+            class="form__button form__button--save"
+            @click.stop="submitForm"
+          >
             Зберегти
           </button>
         </form>
-        <base-select-whith-button v-model:modelValue="cityDelivery" v-bind:options="allCityDelivery" />
-        <base-input-whith-search v-bind:isError="isError" v-model:modelValue="numberDelivery"
-          v-bind:options="allNumberDelivery" />
-        <button type="submit" class="form__button form__button--confirm"
-          @click.stop="receiveOrderConfirmation('delivery')">
+        <base-select-whith-button
+          v-model:modelValue="cityDelivery"
+          v-bind:options="allCityDelivery"
+        />
+        <base-input-whith-search
+          v-bind:isError="isError"
+          v-model:modelValue="numberDelivery"
+          v-bind:options="allNumberDelivery"
+        />
+        <button
+          type="submit"
+          class="form__button form__button--confirm"
+          @click.stop="receiveOrderConfirmation('delivery')"
+        >
           Підтверджую замовлення
         </button>
       </div>
@@ -51,7 +84,10 @@
             <div class="check__summa-title">До сплати</div>
             <div class="check__summa-text">{{ getTheSum }} ₴</div>
           </div>
-          <button class="check__button" @click.stop="receiveOrderConfirmation('delivery')">
+          <button
+            class="check__button"
+            @click.stop="receiveOrderConfirmation('delivery')"
+          >
             Підтверджую замовлення
           </button>
         </div>
@@ -59,7 +95,10 @@
     </div>
     <div class="user-request__title">Ваше замовлення</div>
     <div class="user-request__list" v-for="item in products" :key="item.id">
-      <button class="user-request__cancel" @click="deleteProduct(item.products._id)">
+      <button
+        class="user-request__cancel"
+        @click="deleteProduct(item.products._id)"
+      >
         <img src="../../public/images/cancel.png" alt="" />
       </button>
       <img :src="item.products.imageUrl" alt="" class="user-request__img" />
@@ -72,29 +111,53 @@
       <div class="type-of-delivery__left">
         <div class="type-of-delivery__title">Доставка</div>
         <div class="radio-group">
-          <input class="radio-input" name="radio-group" id="radio1" type="radio" value="Доставка Нова Пошта"
-            v-model="typeDelivery" />
+          <input
+            class="radio-input"
+            name="radio-group"
+            id="radio1"
+            type="radio"
+            value="Доставка Нова Пошта"
+            v-model="typeDelivery"
+          />
           <label class="radio-label" for="radio1">
             <span class="radio-inner-circle"></span>
             Доставка Нова Пошта
           </label>
 
-          <input class="radio-input" name="radio-group" id="radio2" type="radio" value="Самовивіз НоваПошта"
-            v-model="typeDelivery" />
+          <input
+            class="radio-input"
+            name="radio-group"
+            id="radio2"
+            type="radio"
+            value="Самовивіз НоваПошта"
+            v-model="typeDelivery"
+          />
           <label class="radio-label" for="radio2">
             <span class="radio-inner-circle"></span>
             Самовивіз НоваПошта
           </label>
 
-          <input class="radio-input" name="radio-group" id="radio3" type="radio" value="Самовивіз УкрПошта"
-            v-model="typeDelivery" />
+          <input
+            class="radio-input"
+            name="radio-group"
+            id="radio3"
+            type="radio"
+            value="Самовивіз УкрПошта"
+            v-model="typeDelivery"
+          />
           <label class="radio-label" for="radio3">
             <span class="radio-inner-circle"></span>
             Самовивіз УкрПошта
           </label>
 
-          <input class="radio-input" name="radio-group" id="radio4" type="radio" value="Доставка УкрПошта"
-            v-model="typeDelivery" />
+          <input
+            class="radio-input"
+            name="radio-group"
+            id="radio4"
+            type="radio"
+            value="Доставка УкрПошта"
+            v-model="typeDelivery"
+          />
           <label class="radio-label" for="radio4">
             <span class="radio-inner-circle"></span>
             Доставка УкрПошта
@@ -105,15 +168,27 @@
         <div class="type-of-delivery__title">Оплата</div>
 
         <div class="radio-group__right">
-          <input class="radio-input" name="radio-group__right" id="radio1__right" type="radio" value="false"
-            v-model="payNow" />
+          <input
+            class="radio-input"
+            name="radio-group__right"
+            id="radio1__right"
+            type="radio"
+            value="false"
+            v-model="payNow"
+          />
           <label class="radio-label" for="radio1__right">
             <span class="radio-inner-circle"></span>
             Оплата при отриманні
           </label>
 
-          <input class="radio-input" name="radio-group__right" id="radio2__right" type="radio" value="true"
-            v-model="payNow" />
+          <input
+            class="radio-input"
+            name="radio-group__right"
+            id="radio2__right"
+            type="radio"
+            value="true"
+            v-model="payNow"
+          />
           <label class="radio-label" for="radio2__right">
             <span class="radio-inner-circle"></span>
             Оплатити зараз
@@ -121,19 +196,34 @@
         </div>
         <div class="pay" v-if="payNow == 'true'">
           <div class="pay__title">Номер карти</div>
-          <input class="pay__input pay__input--card" v-model="numberCard" type="text" @input="getCardInput"
-            ref="cardInput" />
+          <input
+            class="pay__input pay__input--card"
+            v-model="numberCard"
+            type="text"
+            @input="getCardInput"
+            ref="cardInput"
+          />
 
           <div class="pay__props">
             <div class="pay__props--gap">
               <div class="pay__title">Термін дії</div>
-              <input class="pay__input pay__input--term" v-model="termCard" type="text" @input="getTermInput"
-                ref="termInput" />
+              <input
+                class="pay__input pay__input--term"
+                v-model="termCard"
+                type="text"
+                @input="getTermInput"
+                ref="termInput"
+              />
             </div>
             <div class="">
               <div class="pay__title">CVV</div>
-              <input class="pay__input pay__input--cvv" v-model="cvvCard" type="text" @input="getCvvInput"
-                ref="cvvInput" />
+              <input
+                class="pay__input pay__input--cvv"
+                v-model="cvvCard"
+                type="text"
+                @input="getCvvInput"
+                ref="cvvInput"
+              />
             </div>
           </div>
         </div>
@@ -155,15 +245,25 @@
         <div class="check__summa-title">До сплати</div>
         <div class="check__summa-text">{{ getTheSum }} ₴</div>
       </div>
-      <div class="check__button" @click.stop="receiveOrderConfirmation('delivery')">
+      <div
+        class="check__button"
+        @click.stop="receiveOrderConfirmation('delivery')"
+      >
         Підтверджую замовлення
       </div>
     </div>
   </div>
 
-  <regModal v-if="regContent" @modal="(regContent = !regContent), (authContent = true)" v-model:regContent="regContent" />
-  <authModal v-if="authContent" @modal="(authContent = !authContent), (regContent = true)"
-    v-model:authContent="authContent" />
+  <regModal
+    v-if="regContent"
+    @modal="(regContent = !regContent), (authContent = true)"
+    v-model:regContent="regContent"
+  />
+  <authModal
+    v-if="authContent"
+    @modal="(authContent = !authContent), (regContent = true)"
+    v-model:authContent="authContent"
+  />
 </template>
 
 <script>
@@ -264,7 +364,7 @@ export default {
     },
     getTheSum() {
       let summ = [...this.products]
-        .reduce((acc, val) => (acc += +val.summ * +val.products.newPrice), 0)
+        .reduce((acc, val) => (acc += +val.summ * +val.newPrice), 0)
         .toString();
 
       return summ
@@ -279,21 +379,21 @@ export default {
   },
   methods: {
     sendMessage() {
-      const token = '6700460046:AAHX2VEGlAkcmhXh2_S2zLvk_whH1eKghZU';
-      const chatId = '@asdopklasdpkoaspodop';
-      const message = 'Ваше сообщение здесь';
-
+      const token = "6700460046:AAHX2VEGlAkcmhXh2_S2zLvk_whH1eKghZU";
+      const chatId = "@asdopklasdpkoaspodop";
+      const message = "Ваше сообщение здесь";
       const apiUrl = `https://api.telegram.org/bot${token}/sendMessage`;
 
-      axios.post(apiUrl, {
-        chat_id: chatId,
-        text: message,
-      })
-        .then(response => {
-          console.log('Сообщение успешно отправлено:', response.data);
+      axios
+        .post(apiUrl, {
+          chat_id: chatId,
+          text: message,
         })
-        .catch(error => {
-          console.error('Ошибка при отправке сообщения:', error.response.data);
+        .then((response) => {
+          console.log("Сообщение успешно отправлено:", response.data);
+        })
+        .catch((error) => {
+          console.error("Ошибка при отправке сообщения:", error.response.data);
         });
     },
     async submitForm() {
@@ -355,11 +455,10 @@ export default {
       }
     },
     getCol(item) {
-      return `${this.indentInThousands(item?.products.newPrice)} ₴ х ${item.summ
-        } од.`;
+      return `${this.indentInThousands(item?.newPrice)} ₴ х ${item.summ} од.`;
     },
     getSum(item) {
-      return this.indentInThousands(+item?.products.newPrice * +item.summ);
+      return this.indentInThousands(+item?.newPrice * +item.summ);
     },
     deleteProduct(id) {
       console.log(id);
@@ -415,6 +514,7 @@ export default {
         window.scrollTo(0, top);
       } else {
         this.fetchAddOrder();
+        this.sendMessage();
         this.products = [];
         localStorage.removeItem(`order`);
       }
@@ -475,7 +575,6 @@ input {
   animation: shake 0.2s 4;
 
   @keyframes shake {
-
     0%,
     100% {
       translate: 0;
@@ -556,7 +655,8 @@ input {
   display: flex;
   justify-content: space-between;
 
-  &__right {}
+  &__right {
+  }
 
   &__left {
     width: 365px;
@@ -854,7 +954,7 @@ input {
   &__img {
     width: 116px;
     height: 116px;
-
+    object-fit: contain;
     @media (max-width: 1040px) {
       max-width: 116px;
       max-height: 116px;
@@ -919,9 +1019,11 @@ input {
   gap: 115px;
   margin-top: 50px;
 
-  &__left {}
+  &__left {
+  }
 
-  &__right {}
+  &__right {
+  }
 
   &__title {
     font-size: 1.5rem;
@@ -981,11 +1083,11 @@ input {
   position: relative;
 }
 
-.radio-input:checked+.radio-label .radio-inner-circle {
+.radio-input:checked + .radio-label .radio-inner-circle {
   border-color: #000000;
 }
 
-.radio-input:checked+.radio-label .radio-inner-circle::after {
+.radio-input:checked + .radio-label .radio-inner-circle::after {
   content: "";
   display: block;
   width: 0.5em;

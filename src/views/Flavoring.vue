@@ -39,7 +39,6 @@
         </div>
         <div class="goods__title">
           {{ products.title }}
-          <!-- Ароматизатор TBA Blueberry <br />(Wild) (Дикая Черника) -->
         </div>
         <div class="reviews">
           <div class="reviews__stars" v-if="products.ratingVoid">
@@ -71,14 +70,15 @@
             </div>
           </div>
         </div>
-        <div class="prises">
-          <div class="prises__oldPrice" v-if="products?.oldPrice">
-            {{ products.oldPrice }}
+        <div class="prises" v-if="getPrise">
+          <div class="prises__oldPrice" v-if="getPrise[0]?.oldPrice">
+            {{ getPrise[0]?.oldPrice }}
           </div>
-          <div class="prises__newPrice" v-if="products?.newPrice">
-            {{ products.newPrice }}₴
+          <div class="prises__newPrice" v-if="getPrise[0]?.newPrice">
+            {{ getPrise[0]?.newPrice }}₴
           </div>
         </div>
+
         <div class="capacity">
           <div
             class="capacity__title"
@@ -135,7 +135,7 @@ export default {
     return {
       products: [],
       isLoader: false,
-      containerVolume: "0.001",
+      containerVolume: "0.1л",
       summ: 1,
       section: {},
       category: "",
@@ -156,6 +156,7 @@ export default {
         {
           containerVolume: this.containerVolume,
           summ: +this.summ,
+          newPrice: this.getPrise[0]?.newPrice,
           products: this.products,
         },
       ];
@@ -254,17 +255,30 @@ export default {
       }
     },
   },
-  computed: {},
-
+  computed: {
+    getPriseFromContainerVolume() {
+      if (this.products) {
+        let array = JSON.parse(JSON.stringify(this.products));
+        return array.containerVolume;
+      }
+    },
+    getPrise() {
+      return this.getPriseFromContainerVolume.filter(
+        (item) => item.value == this.containerVolume
+      );
+    },
+  },
+  created() {
+    const currentParams = { ...this.$route.query };
+    this.fetchGetProduct(currentParams.flavoringId);
+  },
   mounted() {
     this.$nextTick(async function () {
       this.token = JSON.parse(localStorage.getItem(`token`));
       if (this.token) {
         this.fetchAddViews();
       }
-
       const currentParams = { ...this.$route.query };
-      this.fetchGetProduct(currentParams.flavoringId);
       if (currentParams.sectionName) {
         this.fetchFindSection(currentParams.sectionName);
       }
@@ -274,6 +288,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.colorbg {
+  background: #00000050;
+}
 a {
   text-decoration: none;
 }
@@ -310,7 +327,7 @@ input {
   }
 }
 .card__img {
-  padding: 55px 10px;
+  padding: 0 10px;
   width: 100%;
 
   object-fit: contain;

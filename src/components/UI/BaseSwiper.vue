@@ -20,7 +20,10 @@
       >
         <template v-for="(item, idx) in products">
           <swiper-slide>
-            <div class="card">
+            <div
+              class="card"
+              :style="{ opacity: item?.stock_quantity === 0 ? '.3' : '1' }"
+            >
               <button class="like" @click="likedProduct(item)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

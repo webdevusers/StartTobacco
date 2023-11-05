@@ -12,7 +12,10 @@
         :breakpoints="breakpoints"
       >
         <template v-for="(item, idx) in reviews" :key="idx">
-          <swiper-slide class="card">
+          <swiper-slide
+            class="card"
+            :style="{ opacity: item?.stock_quantity === 0 ? '.3' : '1' }"
+          >
             <div class="reviews-image">
               <img :src="item.src" alt="" />
             </div>

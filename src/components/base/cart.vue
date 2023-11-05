@@ -8,15 +8,15 @@
             :key="`${item.products._id} + ${item.containerVolume}`"
           >
             <div class="item-remove" @click="deleteItem(item.products._id)">
-              <img src="/icons/delete.svg" alt="" />
+              <img class="item-remove" src="/icons/delete.svg" alt="" />
             </div>
             <div class="item-img">
-              <img :src="item.products.imageUrl" alt="" />
+              <img class="item-img" :src="item.products.imageUrl" alt="" />
             </div>
             <div class="item-name">
               {{ item.products.title }}
             </div>
-            <div class="item-price">{{ item.products.newPrice }}₴</div>
+            <div class="item-price">{{ item.newPrice }}₴</div>
             <div class="item-count">
               <button @click="removeCount(item)" v-if="item.summ > 0">-</button>
               <div class="input">{{ item.summ }}</div>
@@ -95,7 +95,7 @@ export default {
   computed: {
     getTheSum() {
       let summ = [...this.itemsCart]
-        .reduce((acc, val) => (acc += +val.summ * +val.products.newPrice), 0)
+        .reduce((acc, val) => (acc += +val.summ * +val.newPrice), 0)
         .toString();
 
       return summ
@@ -296,7 +296,32 @@ export default {
       font-size: 14px;
     }
   }
-
+  &-remove {
+    height: 32px;
+    width: 32px;
+    object-fit: contain;
+    @media (max-width: 765px) {
+      height: 20px;
+      width: 20px;
+    }
+    @media (max-width: 570px) {
+      height: 15px;
+      width: 15px;
+    }
+  }
+  &-img {
+    height: 150px;
+    width: 150px;
+    object-fit: contain;
+    @media (max-width: 765px) {
+      height: 100px;
+      width: 100px;
+    }
+    @media (max-width: 570px) {
+      height: 65px;
+      width: 65px;
+    }
+  }
   &-name {
     font-family: tobacco;
     font-size: 20px;

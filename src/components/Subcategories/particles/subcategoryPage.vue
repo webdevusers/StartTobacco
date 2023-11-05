@@ -11,7 +11,10 @@
 
       <div class="category__list">
         <template v-for="(item, idx1) in categories.products" :key="item?._id">
-          <div class="card">
+          <div
+            class="card"
+            :style="{ opacity: item?.stock_quantity === 0 ? '.3' : '1' }"
+          >
             <button class="like" @click="likedProduct(item)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +35,11 @@
                 />
               </svg>
             </button>
-            <a class="" href="#" @click.prevent="goToFlavoring(item)">
+            <a
+              class="category__link"
+              href="#"
+              @click.prevent="goToFlavoring(item)"
+            >
               <product-card
                 class="category__item"
                 :title="item?.title"
@@ -56,7 +63,10 @@
 
         <div class="category__list">
           <template v-for="(item, idx1) in point.products" :key="item?._id">
-            <div class="card">
+            <div
+              class="card"
+              :style="{ opacity: item?.stock_quantity === 0 ? '.3' : '1' }"
+            >
               <button class="like" @click="likedProduct(item)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +87,11 @@
                   />
                 </svg>
               </button>
-              <a class="" href="#" @click.prevent="goToFlavoring(item)">
+              <a
+                class="category__link"
+                href="#"
+                @click.prevent="goToFlavoring(item)"
+              >
                 <product-card
                   class="category__item"
                   :title="item?.title"
@@ -273,9 +287,9 @@ export default {
   .card {
     display: flex;
     position: relative;
-    width: 250px;
+    max-width: 250px;
     @media (max-width: 570px) {
-      width: 280px;
+      max-width: 280px;
       justify-content: center;
     }
   }
@@ -292,7 +306,9 @@ export default {
   &__wrap {
     padding: 64px 0;
   }
-
+  &__link {
+    height: 100%;
+  }
   &__title {
     font-size: 24px;
     font-family: tobacco;
