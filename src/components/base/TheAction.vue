@@ -15,28 +15,34 @@
           <div class="action-categories-icon">
             <img
               src="https://firebasestorage.googleapis.com/v0/b/starttobacco-6ed2b.appspot.com/o/menu-burger-horizontal-svgrepo-com%20(1).svg?alt=media&token=80aa83b0-2a71-473e-a3b3-6816c794c673&_gl=1*1qk6mze*_ga*MTI3NjI3MzY0LjE2OTY0MjI4NDY.*_ga_CW55HF8NVT*MTY5OTE1NTc5OS4xMi4xLjE2OTkxNTU4ODQuNTMuMC4w"
-              alt="" />
+              alt=""
+            />
           </div>
           <div class="action-categories-title">
             <a>Категорії</a>
           </div>
         </div>
-        <div class="action-search">
-          <div class="action-search-input">
-            <input type="text" placeholder="Введите ваш запрос" v-model="request" />
-          </div>
-          <div class="action-search-button">
-            <img src="/icons/search.svg" alt="" />
-          </div>
-        </div>
+        <!-- v-model:model-value="responsSerch" -->
+        <base-inpute-search
+          v-model:fuzzySearch="fuzzySearch"
+          :options="optionsForSearch"
+        />
         <div class="action-personal">
-          <button class="action-personal-item" @click="getUser" style="cursor: pointer">
+          <button
+            class="action-personal-item"
+            @click="getUser"
+            style="cursor: pointer"
+          >
             <img src="/icons/personal.svg" alt="" />
           </button>
           <button class="action-personal-item" @click="goToFlavoring">
             <img src="/icons/liked.svg" alt="" />
           </button>
-          <button class="action-personal-item" @click="cartContent = !cartContent" style="cursor: pointer">
+          <button
+            class="action-personal-item"
+            @click="cartContent = !cartContent"
+            style="cursor: pointer"
+          >
             <img src="/icons/cart.svg" alt="" />
           </button>
         </div>
@@ -46,20 +52,36 @@
         <div class="action-bottom-items">
           <template v-for="(item, idx) in categories" :key="item._id">
             <div class="action-bottom-item" @mouseleave="showCategory = ''">
-              <div class="action-bottom-name" @mouseenter="showCategory = item.title">
-                <a class="action-bottom-name__title" @click.prevent="getUserCategory(item)">
+              <div
+                class="action-bottom-name"
+                @mouseenter="showCategory = item.title"
+              >
+                <a
+                  class="action-bottom-name__title"
+                  @click.prevent="getUserCategory(item)"
+                >
                   {{ item.title }}
                 </a>
-                <div class="action-bottom-name__icon" v-if="item?.sections.length > 0">
+                <div
+                  class="action-bottom-name__icon"
+                  v-if="item?.sections.length > 0"
+                >
                   <ChevronDownIcon class="" aria-hidden="true" />
                 </div>
               </div>
               <div class="" v-if="item?.sections">
-                <template v-if="showCategory === item.title" @mouseenter="showCategory = item.title">
+                <template
+                  v-if="showCategory === item.title"
+                  @mouseenter="showCategory = item.title"
+                >
                   <div class="action-bottom-relative">
                     <div class="action-bottom-subcategories">
                       <div class="action-bottom-subcategories__link">
-                        <a v-for="itm in item.sections" :key="itm._id" @click.prevent="getUserSectinId(itm)">
+                        <a
+                          v-for="itm in item.sections"
+                          :key="itm._id"
+                          @click.prevent="getUserSectinId(itm)"
+                        >
                           <div class="action-bottom-subcategories__text">
                             {{ itm.sectionName }}
                           </div>
@@ -75,13 +97,23 @@
       </div>
     </div>
     <div class="" v-if="!user">
-      <regModal v-if="regContent" @modal="(regContent = !regContent), (authContent = true)"
-        v-model:regContent="regContent" />
-      <authModal v-if="authContent" @modal="(authContent = !authContent), (regContent = true)"
-        v-model:authContent="authContent" />
+      <regModal
+        v-if="regContent"
+        @modal="(regContent = !regContent), (authContent = true)"
+        v-model:regContent="regContent"
+      />
+      <authModal
+        v-if="authContent"
+        @modal="(authContent = !authContent), (regContent = true)"
+        v-model:authContent="authContent"
+      />
     </div>
     <div class="" v-else>
-      <user-modal @modal="userContent = !userContent" v-model:userContent="userContent" v-if="userContent" />
+      <user-modal
+        @modal="userContent = !userContent"
+        v-model:userContent="userContent"
+        v-if="userContent"
+      />
     </div>
     <cart v-if="cartContent" @cart="cartContent = !cartContent" />
     <div class="menu-mobile" v-if="isMenu" @click="isMenu = false">
@@ -95,21 +127,40 @@
         <div class="menu-mobile-bottom-items">
           <div class="menu-mobile-bottom__title">Усі категорії</div>
           <template v-for="(item, idx) in categories" :key="item._id">
-            <div class="menu-mobile-bottom-item" @mouseleave="showCategory = ''">
-              <div class="menu-mobile-bottom-name" @mouseenter="showCategory = item.title">
-                <a class="menu-mobile-bottom-name__title" @click.prevent="getUserCategory(item)">
+            <div
+              class="menu-mobile-bottom-item"
+              @mouseleave="showCategory = ''"
+            >
+              <div
+                class="menu-mobile-bottom-name"
+                @mouseenter="showCategory = item.title"
+              >
+                <a
+                  class="menu-mobile-bottom-name__title"
+                  @click.prevent="getUserCategory(item)"
+                >
                   {{ item.title }}
                 </a>
-                <div class="menu-mobile-bottom-name__icon" v-if="item?.sections.length > 0">
+                <div
+                  class="menu-mobile-bottom-name__icon"
+                  v-if="item?.sections.length > 0"
+                >
                   <ChevronDownIcon class="" aria-hidden="true" />
                 </div>
               </div>
               <div class="" v-if="item?.sections">
-                <template v-if="showCategory === item.title" @mouseenter="showCategory = item.title">
+                <template
+                  v-if="showCategory === item.title"
+                  @mouseenter="showCategory = item.title"
+                >
                   <div class="menu-mobile-bottom-relative">
                     <div class="menu-mobile-bottom-subcategories">
                       <div class="menu-mobile-bottom-subcategories__link">
-                        <a v-for="itm in item.sections" :key="itm._id" @click.prevent="getUserSectinId(itm)">
+                        <a
+                          v-for="itm in item.sections"
+                          :key="itm._id"
+                          @click.prevent="getUserSectinId(itm)"
+                        >
                           <div class="menu-mobile-bottom-subcategories__text">
                             {{ itm.sectionName }}
                           </div>
@@ -124,7 +175,11 @@
         </div>
         <div class="menu-mobile-personal">
           <div class="menu-mobile-personal-icon">
-            <button class="menu-mobile-personal-item" @click="getUser" style="cursor: pointer">
+            <button
+              class="menu-mobile-personal-item"
+              @click="getUser"
+              style="cursor: pointer"
+            >
               <img src="/icons/personal.svg" alt="" />
               <div class="menu-mobile-personal-btn-title">
                 Особистий кабінет
@@ -134,8 +189,11 @@
               <img src="/icons/liked.svg" alt="" />
               <div class="menu-mobile-personal-btn-title">Обране</div>
             </button>
-            <button class="menu-mobile-personal-item" @click="(isMenu = false), (cartContent = !cartContent)"
-              style="cursor: pointer">
+            <button
+              class="menu-mobile-personal-item"
+              @click="(isMenu = false), (cartContent = !cartContent)"
+              style="cursor: pointer"
+            >
               <img src="/icons/cart.svg" alt="" />
               <div class="menu-mobile-personal-btn-title">Кошик</div>
             </button>
@@ -144,27 +202,40 @@
         <div class="contacts">
           <div class="contacts__title">Контакти</div>
           <div class="contacts__item">
-            <img class="contacts__icon" src="../../../public/images/phone.png" />
+            <img
+              class="contacts__icon"
+              src="../../../public/images/phone.png"
+            />
             <a class="contacts__text" href="tel:">+38 (068) 657 18 28</a>
           </div>
           <div class="contacts__item">
-            <img class="contacts__icon" src="../../../public/images/phone.png" />
+            <img
+              class="contacts__icon"
+              src="../../../public/images/phone.png"
+            />
             <a class="contacts__text" href="tel:">+38 (099) 449 04 52</a>
           </div>
           <div class="contacts__item">
             <img class="contacts__icon" src="../../../public/images/mail.png" />
-            <a class="contacts__text" href="mailto:tobaccostart@gmail.com">tobaccostart@gmail.com</a>
+            <a class="contacts__text" href="mailto:tobaccostart@gmail.com"
+              >tobaccostart@gmail.com</a
+            >
           </div>
           <div class="contacts__item">
-            <img class="contacts__icon" src="../../../public/images/telegram.png" />
-            <a class="contacts__text" href="https://t.me/zloy_huann">Telegram</a>
+            <img
+              class="contacts__icon"
+              src="../../../public/images/telegram.png"
+            />
+            <a class="contacts__text" href="https://t.me/zloy_huann"
+              >Telegram</a
+            >
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-<script setup>
+<script>
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/20/solid";
 import regModal from "./authComponents/regModal.vue";
@@ -172,8 +243,8 @@ import authModal from "./authComponents/authModal.vue";
 import userModal from "./authComponents/userModal.vue";
 import cart from "./cart.vue";
 import axios from "axios";
-</script>
-<script>
+import BaseInputeSearch from "../UI/BaseInputeSearch.vue";
+
 export default {
   data() {
     return {
@@ -188,6 +259,9 @@ export default {
       categories: [],
       user: [],
       isMenu: false,
+      responsSerch: "",
+      fuzzySearch: "",
+      optionsForSearch: [],
     };
   },
   components: {
@@ -197,6 +271,10 @@ export default {
     MenuItem,
     ChevronDownIcon,
     userModal,
+    BaseInputeSearch,
+    regModal,
+    authModal,
+    cart,
   },
   methods: {
     clearCategory() {
@@ -234,6 +312,33 @@ export default {
         });
       }
     },
+    async fetchSearch(request) {
+      try {
+        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/search/${request}`;
+        const response = await axios.get(urlStr, {});
+        this.optionsForSearch = response.data.products;
+      } catch (err) {
+        console.log(err);
+      } finally {
+      }
+    },
+  },
+  watch: {
+    async fuzzySearch(newValue) {
+      setTimeout(async () => {
+        await this.fetchSearch(newValue);
+      }, 1000);
+    },
+    regContent(newValue) {
+      setTimeout(() => {
+        this.user = JSON.parse(localStorage.getItem(`user`));
+      }, 2000);
+    },
+    authContent(newValue) {
+      setTimeout(() => {
+        this.user = JSON.parse(localStorage.getItem(`user`));
+      }, 2000);
+    },
   },
   mounted() {
     this.$nextTick(async function () {
@@ -251,18 +356,7 @@ export default {
       this.categories = response;
     });
   },
-  watch: {
-    regContent(newValue) {
-      setTimeout(() => {
-        this.user = JSON.parse(localStorage.getItem(`user`));
-      }, 2000);
-    },
-    authContent(newValue) {
-      setTimeout(() => {
-        this.user = JSON.parse(localStorage.getItem(`user`));
-      }, 2000);
-    },
-  },
+
   async created() {
     this.user = await JSON.parse(localStorage.getItem(`user`));
     if (this.user?.name == undefined) {
@@ -549,7 +643,7 @@ export default {
     display: flex;
     z-index: 100;
     flex-direction: column;
-    animation: load .7s;
+    animation: load 0.7s;
     &-bottom {
       position: absolute;
       top: 0;
