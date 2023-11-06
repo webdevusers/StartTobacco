@@ -54,11 +54,25 @@
           v-model:modelValue="cityDelivery"
           v-bind:options="allCityDelivery"
         />
-        <base-input-whith-search
+        <div :class="[isError ? 'shake--transition' : '', 'with-search']">
+          <base-input
+            class="with-search__input"
+            v-model="numberDelivery"
+            type="text"
+            placeholder="Селище"
+          />
+          <base-input
+            class="with-search__input"
+            v-model="numberDelivery"
+            type="text"
+            placeholder="Відділення"
+          />
+        </div>
+        <!-- <base-input-whith-search
           v-bind:isError="isError"
           v-model:modelValue="numberDelivery"
           v-bind:options="allNumberDelivery"
-        />
+        /> -->
         <button
           type="submit"
           class="form__button form__button--confirm"
@@ -570,22 +584,37 @@ export default {
 input {
   outline: none;
 }
-
-.shake--transition {
-  animation: shake 0.2s 4;
-
-  @keyframes shake {
-    0%,
-    100% {
-      translate: 0;
+.with-search {
+  display: flex;
+  column-gap: 30px;
+  &__input {
+    margin: 35px 0 30px;
+    border: 1px solid rgb(0, 0, 0);
+    font-size: 0.875rem;
+    padding: 14px 12px;
+    color: rgba(41, 41, 41, 0.5);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    max-width: 245px;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    @media screen and (max-width: 570px) {
+      font-size: 0.75rem;
+      padding: 8px 6px;
+      line-height: normal;
+      font-style: normal;
     }
-
-    25% {
-      translate: 8px 0;
+    @media (min-width: 640px) {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
     }
-
-    75% {
-      translate: -8px 0;
+    @media screen and (max-width: 570px) {
+      font-size: 0.625rem;
+      padding: 8px 6px;
+      max-width: 140px;
     }
   }
 }
@@ -726,10 +755,6 @@ input {
       padding: 8px 17px;
     }
   }
-}
-
-.input-with-search {
-  margin: 35px 0 75px;
 }
 
 .check {
@@ -1099,7 +1124,23 @@ input {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.shake--transition {
+  animation: shake 0.2s 4;
+  @keyframes shake {
+    0%,
+    100% {
+      translate: 0;
+    }
 
+    25% {
+      translate: 8px 0;
+    }
+
+    75% {
+      translate: -8px 0;
+    }
+  }
+}
 .pay {
   margin-top: 40px;
 
