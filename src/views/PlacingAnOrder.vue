@@ -395,7 +395,7 @@ export default {
     sendMessage() {
       const token = "6700460046:AAHX2VEGlAkcmhXh2_S2zLvk_whH1eKghZU";
       const chatId = "@asdopklasdpkoaspodop";
-      const message = "Ваше сообщение здесь";
+      const message = `Замовлення. Имя кліента: ${this.user.name} ${this.user.surname}.Телефон ${this.user.phone}. До сплати ${this.getTheSum}. Деталі замовлення на сайті.`;
       const apiUrl = `https://api.telegram.org/bot${token}/sendMessage`;
 
       axios
