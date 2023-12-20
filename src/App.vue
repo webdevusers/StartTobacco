@@ -1,17 +1,55 @@
 <script setup>
-import { RouterView } from "vue-router";
+import { RouterView, useRoute } from "vue-router";
 import TheHeader from "./components/base/TheHeader.vue";
 import TheActions from "./components/base/TheAction.vue";
 import TheFooter from "./components/base/TheFooter.vue";
+
+import { nextTick, ref, watch } from 'vue';
+
+const renderComponent = ref(true);
+const route = useRoute();
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+watch(() => route.fullPath, async () => {
+  renderComponent.value = false;
+  await nextTick();
+
+  renderComponent.value = true;
+  scrollToTop();
+});
 </script>
 
 <template>
   <TheHeader />
   <TheActions />
-  <RouterView />
+  <RouterView v-if="renderComponent" />
+  <template v-if="renderComponent === false">
+    <div class="wrap">
+
+    </div>
+  </template>
   <TheFooter />
 </template>
+<script>
+export default {
+  created() {
+    if (!localStorage.getItem('locale')) {
+      localStorage.setItem('locale', this.$i18n.locale)
+    }
+    const item = localStorage.getItem('locale')
+
+    this.$i18n.locale = item
+  }
+}
+</script>
 <style lang="scss">
+.product-card {
+  min-height: 535px;
+}
+
 .card {
   // max-height: 500px;
 }
@@ -26,10 +64,13 @@ import TheFooter from "./components/base/TheFooter.vue";
 a {
   text-decoration: none;
 }
+
 #app {
-  overflow-x: hidden; /*для горизонтального*/
+  overflow-x: hidden;
+  /*для горизонтального*/
   box-sizing: border-box;
 }
+
 .swiper-pagination-bullet {
   width: 38px !important;
   height: 8px !important;
@@ -43,6 +84,7 @@ a {
 @font-face {
   font-family: tobacco;
   src: url("/fonts/Dinpro.ttf");
+  font-display: swap;
 }
 
 * {
@@ -88,6 +130,7 @@ a {
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 12px;
+
   &-count {
     display: flex;
     flex-direction: row;

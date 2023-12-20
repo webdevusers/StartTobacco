@@ -6,7 +6,7 @@
           <div class="user__foto">
             <img
               class="user__foto-img"
-              src="../../public/images/non-img-user.png"
+              src="/images/non-img-user.png"
               alt=""
             />
           </div>
@@ -34,7 +34,14 @@
             <div class="menu-for-user__circl">
               <img class="menu-for-user__img" :src="item.img" alt="" />
             </div>
-            <div class="menu-for-user__text">{{ item.name }}</div>
+            <div class="menu-for-user__text">
+              <template v-if="this.$i18n.locale === 'ua'">
+                {{ item.name }}
+              </template>
+              <template v-else>
+                {{ item.ruName }}
+              </template>
+            </div>
           </a>
         </div>
       </div>
@@ -42,7 +49,7 @@
       <div class="personal-information__right">
         <div v-if="getItem[0].href == 'my-orders'">
           <div class="personal-information__first-title" v-if="myOrder">
-            Мої замовлення
+            {{ $t('myOrders') }}
           </div>
           <div class="personal-information__first" v-if="myOrder">
             <template v-for="item in myOrder">
@@ -123,7 +130,7 @@
           </div>
         </div>
         <div class="" v-else-if="getItem[0].href == 'chosen'">
-          <div class="personal-information__first-title">Обране</div>
+          <div class="personal-information__first-title">{{ $t('myChosen') }}</div>
           <div class="personal-information__first">
             <template v-for="item in likeProducts">
               <div
@@ -166,7 +173,7 @@
         </div>
         <div class="" v-else>
           <div class="personal-information__first-title">
-            Переглянуті товари
+            {{ $t('myViews') }}
           </div>
 
           <div class="personal-information__first">
@@ -218,21 +225,24 @@ import productCard from "@/components/UI/productCard.vue";
 let navigation = [
   {
     name: "Мої замовлення",
+    ruName: "Мои заказы",
     href: "my-orders",
     current: true,
-    img: "../../public/images/orders.png",
+    img: "/images/orders.png",
   },
   {
     name: "Обране",
+    ruName: "Избранное",
     href: "chosen",
     current: false,
-    img: "../../public/images/like.png",
+    img: "/images/like.png",
   },
   {
     name: "Переглянуті товари",
+    ruName: "Просмотренные товары",
     href: "reviewed-products",
     current: false,
-    img: "../../public/images/eye.png",
+    img: "/images/eye.png",
   },
 ];
 export default {
@@ -241,7 +251,7 @@ export default {
       navigation,
       user: [],
       token: "",
-      views: [],
+      views: null,
       myOrder: [],
       orderedProducts: [],
       likeProducts: [],
@@ -298,7 +308,7 @@ export default {
     async fetchUserLike(id) {
       try {
         // this.isLoader = true;
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/like`;
+        let urlStr = `https://eshopbackend-72da33f36405.herokuapp.com/user/like`;
         const response = await axios.post(urlStr, {
           productID: id,
           userID: this.user._id,
@@ -314,7 +324,7 @@ export default {
     async fetchUserDislike(id) {
       try {
         // this.isLoader = true;
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/dislike`;
+        let urlStr = `https://eshopbackend-72da33f36405.herokuapp.com/user/dislike`;
         const response = await axios.post(urlStr, {
           productID: id,
           userID: this.user._id,
@@ -330,14 +340,13 @@ export default {
     async fetchAuthorizationGet(token) {
       try {
         // this.isLoader = true;
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/get/`;
+        let urlStr = `https://eshopbackend-72da33f36405.herokuapp.com/user/get/`;
         const response = await axios.post(urlStr, {
           token: token,
         });
         this.user = response.data.user;
         this.fetchGetLiked();
         this.fetchGetViews();
-        this.fetchGetCart();
         localStorage.setItem(`user`, JSON.stringify(this.user));
       } catch (err) {
         console.log(err);
@@ -347,11 +356,11 @@ export default {
     },
     async fetchGetLiked() {
       try {
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/getliked`;
+        let urlStr = `https://eshopbackend-72da33f36405.herokuapp.com/user/getliked`;
         const response = await axios.post(urlStr, {
           token: this.token,
         });
-        this.likeProducts = response.data.likedProducts;
+        this.likeProducts = response.data.favoriteProducts;
       } catch (err) {
         console.log(err);
       } finally {
@@ -359,25 +368,12 @@ export default {
     },
     async fetchGetViews() {
       try {
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/getviews`;
+        let urlStr = `https://eshopbackend-72da33f36405.herokuapp.com/user/getviews`;
         const response = await axios.post(urlStr, {
           token: this.token,
         });
-        this.views = response.data.views;
+        this.views = response.data.viewedProducts;
         // console.log(this.views);
-      } catch (err) {
-        console.log(err);
-      } finally {
-      }
-    },
-    async fetchGetCart() {
-      try {
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/getcart`;
-        const response = await axios.post(urlStr, {
-          token: this.token,
-        });
-        this.orderedProducts = response.data.orderedProducts;
-        // console.log(this.orderedProducts);
       } catch (err) {
         console.log(err);
       } finally {
@@ -394,7 +390,6 @@ export default {
     this.user = JSON.parse(localStorage.getItem(`user`));
     this.token = JSON.parse(localStorage.getItem(`token`));
     this.fetchGetLiked();
-    this.fetchGetCart();
     this.fetchGetViews();
   },
   watch: {

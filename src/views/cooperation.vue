@@ -7,23 +7,19 @@
                 </div>
                 <div class="cooperation-text">
                     <p>
-                        Запрошуємо до співпраці інтернет магазини , фізичні магазини , фермерів та виробників в тютюновій
-                        сфері.
-                        Ми відкриті для нових пропозицій. <br> <br>
-                        <b>Розглядаємо всі види співпраці.</b>
-                        Для отримання оптового прайсу, залиште свої контакти , наш менеджер зв‘яжеться з вами найближчим
-                        часом
-                        та відправить вам прайс.
+                        {{ $t('cooperationText1')}}<br> <br>
+                        <b>{{ $t('cooperationText2')}}</b>
+                        {{ $t('cooperationText3')}}
                     </p>
                 </div>
             </div>
             <div>
                 <form>
-                    <input type="text" placeholder="Як вас звати?" id="" v-model="name">
-                    <input type="text" placeholder="Ваш мобільний телефон" id="" v-model="phone">
-                    <textarea name="" id="" cols="30" rows="10" placeholder="Коментар" />
+                    <input type="text" :placeholder="$t('yourname')" id="" v-model="name">
+                    <input type="text" :placeholder="$t('yourphone')" id="" v-model="phone">
+                    <textarea name="" id="" cols="30" rows="10" :placeholder="$t('yourcomment')" />
                     <button @click="sendMessage">
-                        Відправити
+                        {{ $t('sendBtn') }}
                     </button>
                 </form>
             </div>

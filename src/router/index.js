@@ -8,6 +8,7 @@ import UsersPersonalInformation from "../views/UsersPersonalInformation.vue";
 import About from '../views/About.vue'
 import cooperation from '../views/cooperation.vue'
 import Contacts from '../views/contacts.vue'
+import NotFound from '../views/notFound.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,11 +33,11 @@ const router = createRouter({
       name: "personalInformation",
       component: UsersPersonalInformation,
     },
-    // {
-    //   path: "/allCategories",
-    //   name: "allCategories",
-    //   component: allCategories,
-    // },
+    {
+      path: "/search",
+      name: "search",
+      component: () => import('../views/Search.vue')
+    },
     {
       path: "/subcategory",
       name: "subcategory",
@@ -56,6 +57,10 @@ const router = createRouter({
       path: '/contacts',
       name: 'contacts',
       component: Contacts
+    },
+    {
+      path: '/:catchAll(.*)',
+      component: NotFound
     }
   ],
 });

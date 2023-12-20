@@ -23,6 +23,11 @@ export default {
       this.$emit("update:modelValue", event.target.value);
     },
   },
+  mounted() {
+    if (this.modelValue == "") {
+      this.$emit("update:modelValue", this.options[0].value);
+    }
+  },
 };
 </script>
 <style lang="scss" scoped>

@@ -7,11 +7,11 @@
           <img src="/images/logo.png" alt="" />
         </div>
 
-        <div class="content-text__title">Ласкаво просимо!</div>
+        <div class="content-text__title">{{ $t('welcomeText')}}</div>
         <div class="content-text__desc">{{ user.name }}</div>
 
         <div class="content-form__button" @click="goToFlavoring">
-          Увійдіть в свій особистий кабінет
+          {{ $t('welcomeClient')}}
         </div>
       </div>
     </div>
@@ -39,7 +39,7 @@ export default {
     async fetchAuthorizationToken() {
       try {
         this.isLoader = true;
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/authorization`;
+        let urlStr = `https://eshopbackend-72da33f36405.herokuapp.com/user/authorization`;
         const response = await axios.post(urlStr, {
           email: this.email,
           password: this.password,
@@ -56,7 +56,7 @@ export default {
     async fetchAuthorizationGet(token) {
       try {
         this.isLoader = true;
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/get/`;
+        let urlStr = `https://eshopbackend-72da33f36405.herokuapp.com/user/get/`;
         const response = await axios.post(urlStr, {
           token: token,
         });

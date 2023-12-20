@@ -137,7 +137,7 @@ export default {
     async fetchUserLike(id) {
       try {
         this.isLoader = true;
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/like`;
+        let urlStr = `https://eshopbackend-72da33f36405.herokuapp.com/user/like`;
         const response = await axios.post(urlStr, {
           productID: id,
           userID: this.user?._id,
@@ -153,7 +153,7 @@ export default {
     async fetchUserDislike(id) {
       try {
         this.isLoader = true;
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/dislike`;
+        let urlStr = `https://eshopbackend-72da33f36405.herokuapp.com/user/dislike`;
         const response = await axios.post(urlStr, {
           productID: id,
           userID: this.user?._id,
@@ -169,7 +169,7 @@ export default {
     async fetchAuthorizationGet(token) {
       try {
         this.isLoader = true;
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/get/`;
+        let urlStr = `https://eshopbackend-72da33f36405.herokuapp.com/user/get/`;
         const response = await axios.post(urlStr, {
           token: token,
         });

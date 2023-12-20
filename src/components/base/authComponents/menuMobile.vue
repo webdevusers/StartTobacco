@@ -1,5 +1,6 @@
 <template>
   <div class="menu-mobile-bottom">
+    фыв
     <div class="menu-mobile-bottom-items">
       <template v-for="(item, idx) in categories" :key="item._id">
         <div class="menu-mobile-bottom-item" @mouseleave="showCategory = ''">

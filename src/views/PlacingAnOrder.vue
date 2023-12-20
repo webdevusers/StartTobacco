@@ -1,118 +1,84 @@
 <template>
   <div class="container">
     <div class="title title--basket">Кошик</div>
-    <div class="title">Оформлення замовлення</div>
-    <div class="contact">Ваші контактні дані</div>
-    <div class="registration-contract">
-      <div class="registration-contract__right">
-        <form action="#" class="form" method="POST" @submit.prevent>
-          <base-input
-            :class="[
-              v$.user.name.$error ? 'errors-color shake--transition' : '',
-              'form__contact',
-            ]"
-            v-model="v$.user.name.$model"
-            type="text"
-            placeholder="Введіть ім&#039;я"
-          />
-          <base-input
-            :class="[
-              v$.user.surname.$error ? 'errors-color shake--transition' : '',
-              'form__contact',
-            ]"
-            v-model="v$.user.surname.$model"
-            type="text"
-            placeholder="Введіть фамілію"
-          />
-          <base-input
-            :class="[
-              v$.user.phone.$error ? ' errors-color shake--transition' : '',
-              'form__contact',
-            ]"
-            v-model="v$.user.phone.$model"
-            type="text"
-            placeholder="Моб.телефон"
-          />
-          <base-input
-            :class="[
-              v$.user.email.$error ? ' errors-color shake--transition' : '',
-              'form__contact',
-            ]"
-            v-model="v$.user.email.$model"
-            type="text"
-            placeholder="Електронна пошта"
-          />
-          <button
-            type="submit"
-            class="form__button form__button--save"
-            @click.stop="submitForm"
-          >
-            Зберегти
-          </button>
-        </form>
-        <base-select-whith-button
-          v-model:modelValue="cityDelivery"
-          v-bind:options="allCityDelivery"
-        />
-        <div :class="[isError ? 'shake--transition' : '', 'with-search']">
-          <base-input
-            class="with-search__input"
-            v-model="numberDelivery"
-            type="text"
-            placeholder="Селище"
-          />
-          <base-input
-            class="with-search__input"
-            v-model="numberDelivery"
-            type="text"
-            placeholder="Відділення"
-          />
+    <div class="row">
+      <div class="type-of-delivery" ref="delivery">
+        <div class="type-of-delivery__left">
+          <div class="type-of-delivery__title">Доставка</div>
+          <div class="radio-group">
+            <input class="radio-input" name="radio-group" id="radio1" type="radio" value="Доставка НоваПошта"
+              v-model="typeDelivery" />
+            <label class="radio-label" for="radio1">
+              <span class="radio-inner-circle"></span>
+              {{ $t('deliveryHP') }}
+            </label>
+
+            <input class="radio-input" name="radio-group" id="radio2" type="radio" value="Самовивіз НоваПошта"
+              v-model="typeDelivery" />
+            <label class="radio-label" for="radio2">
+              <span class="radio-inner-circle"></span>
+              {{ $t('deliveryHP1') }}
+            </label>
+
+            <input class="radio-input" name="radio-group" id="radio3" type="radio" value="Доставка УкрПошта"
+              v-model="typeDelivery" />
+            <label class="radio-label" for="radio3">
+              <span class="radio-inner-circle"></span>
+              {{ $t('deliveryUK') }}
+            </label>
+
+            <input class="radio-input" name="radio-group" id="radio4" type="radio" value="Самовивіз УкрПошта"
+              v-model="typeDelivery" />
+            <label class="radio-label" for="radio4">
+              <span class="radio-inner-circle"></span>
+              {{ $t('deliveryUK1') }}
+            </label>
+          </div>
         </div>
-        <!-- <base-input-whith-search
-          v-bind:isError="isError"
-          v-model:modelValue="numberDelivery"
-          v-bind:options="allNumberDelivery"
-        /> -->
-        <button
-          type="submit"
-          class="form__button form__button--confirm"
-          @click.stop="receiveOrderConfirmation('delivery')"
-        >
-          Підтверджую замовлення
-        </button>
+        <div class="type-of-delivery__right">
+          <div class="type-of-delivery__title">Оплата</div>
+
+          <div class="radio-group__right">
+            <input class="radio-input" name="radio-group__right" id="radio1__right" type="radio" value="false"
+              v-model="payNow" />
+            <label class="radio-label" for="radio1__right">
+              <span class="radio-inner-circle"></span>
+              {{ $t('pay') }}
+            </label>
+
+            <input class="radio-input" name="radio-group__right" id="radio2__right" type="radio" value="true"
+              v-model="payNow" />
+            <label class="radio-label" for="radio2__right">
+              <span class="radio-inner-circle"></span>
+              {{ $t('pay1') }}
+            </label>
+          </div>
+        </div>
       </div>
       <div class="registration-contract__left">
         <div class="check">
-          <div class="check__title">Разом</div>
+          <div class="check__title">{{ $t('razom') }}</div>
           <div class="check__col">
             <div class="check__col-title">
-              {{ getTheSumOfTheQuantityOfGoods }} тов. на суму
+              {{ getTheSumOfTheQuantityOfGoods }} товара на суму
             </div>
             <div class="check__col-summ">{{ getTheSum }} ₴</div>
           </div>
           <div class="check__delivery">
-            <div class="check__delivery-title">Вартість доставки</div>
-            <div class="check__delivery-text">за тарифами перевізника</div>
+            <div class="check__delivery-title">{{ $t('deliveryPrice') }}</div>
+            <div class="check__delivery-text">{{ $t('deliveryText') }}</div>
           </div>
           <div class="check__summa">
-            <div class="check__summa-title">До сплати</div>
+            <div class="check__summa-title">{{ $t('pay2') }}</div>
             <div class="check__summa-text">{{ getTheSum }} ₴</div>
           </div>
-          <button
-            class="check__button"
-            @click.stop="receiveOrderConfirmation('delivery')"
-          >
-            Підтверджую замовлення
-          </button>
         </div>
       </div>
     </div>
-    <div class="user-request__title">Ваше замовлення</div>
+
+    <div class="user-request__title">{{ $t('order') }}</div>
     <div class="user-request__list" v-for="item in products" :key="item.id">
-      <button
-        class="user-request__cancel"
-        @click="deleteProduct(item.products._id)"
-      >
+      <button class="user-request__cancel" @click="deleteProduct(item.products._id)">
         <img src="../../public/images/cancel.png" alt="" />
       </button>
       <img :src="item.products.imageUrl" alt="" class="user-request__img" />
@@ -120,127 +86,64 @@
       <div class="user-request__col">{{ getCol(item) }}</div>
       <div class="user-request__summ">{{ getSum(item) }}₴</div>
     </div>
+    <div class="title">{{ $t('orderTitle') }}</div>
+    <div class="contact">{{ $t('contacts') }}</div>
+    <div class="registration-contract">
+      <div class="registration-contract__right">
+        <form action="#" class="form" method="POST" @submit.prevent>
+          <base-input :class="[
+            v$.user.name.$error ? 'errors-color shake--transition' : '',
+            'form__contact',
+          ]" v-model="v$.user.name.$model" type="text" :placeholder="$t('orderName')" />
+          <base-input :class="[
+            v$.user.surname.$error ? 'errors-color shake--transition' : '',
+            'form__contact',
+          ]" v-model="v$.user.surname.$model" type="text" :placeholder="$t('orderSurname')" />
+          <base-input :class="[
+            v$.user.phone.$error ? ' errors-color shake--transition' : '',
+            'form__contact',
+          ]" v-model="v$.user.phone.$model" type="text" :placeholder="$t('orderPhone')" />
+          <base-input :class="[
+            // v$.user.email.$error ? ' errors-color shake--transition' : '',
+            'form__contact',
+          ]" v-model="user.email" type="text" :placeholder="$t('orderEmail')" />
+        </form>
+        <template v-if="typeDelivery === 'Доставка НоваПошта'">
 
-    <div class="type-of-delivery" ref="delivery">
-      <div class="type-of-delivery__left">
-        <div class="type-of-delivery__title">Доставка</div>
-        <div class="radio-group">
-          <input
-            class="radio-input"
-            name="radio-group"
-            id="radio1"
-            type="radio"
-            value="Доставка Нова Пошта"
-            v-model="typeDelivery"
-          />
-          <label class="radio-label" for="radio1">
-            <span class="radio-inner-circle"></span>
-            Доставка Нова Пошта
-          </label>
-
-          <input
-            class="radio-input"
-            name="radio-group"
-            id="radio2"
-            type="radio"
-            value="Самовивіз НоваПошта"
-            v-model="typeDelivery"
-          />
-          <label class="radio-label" for="radio2">
-            <span class="radio-inner-circle"></span>
-            Самовивіз НоваПошта
-          </label>
-
-          <input
-            class="radio-input"
-            name="radio-group"
-            id="radio3"
-            type="radio"
-            value="Самовивіз УкрПошта"
-            v-model="typeDelivery"
-          />
-          <label class="radio-label" for="radio3">
-            <span class="radio-inner-circle"></span>
-            Самовивіз УкрПошта
-          </label>
-
-          <input
-            class="radio-input"
-            name="radio-group"
-            id="radio4"
-            type="radio"
-            value="Доставка УкрПошта"
-            v-model="typeDelivery"
-          />
-          <label class="radio-label" for="radio4">
-            <span class="radio-inner-circle"></span>
-            Доставка УкрПошта
-          </label>
-        </div>
-      </div>
-      <div class="type-of-delivery__right">
-        <div class="type-of-delivery__title">Оплата</div>
-
-        <div class="radio-group__right">
-          <input
-            class="radio-input"
-            name="radio-group__right"
-            id="radio1__right"
-            type="radio"
-            value="false"
-            v-model="payNow"
-          />
-          <label class="radio-label" for="radio1__right">
-            <span class="radio-inner-circle"></span>
-            Оплата при отриманні
-          </label>
-
-          <input
-            class="radio-input"
-            name="radio-group__right"
-            id="radio2__right"
-            type="radio"
-            value="true"
-            v-model="payNow"
-          />
-          <label class="radio-label" for="radio2__right">
-            <span class="radio-inner-circle"></span>
-            Оплатити зараз
-          </label>
-        </div>
-        <div class="pay" v-if="payNow == 'true'">
-          <div class="pay__title">Номер карти</div>
-          <input
-            class="pay__input pay__input--card"
-            v-model="numberCard"
-            type="text"
-            @input="getCardInput"
-            ref="cardInput"
-          />
-
-          <div class="pay__props">
-            <div class="pay__props--gap">
-              <div class="pay__title">Термін дії</div>
-              <input
-                class="pay__input pay__input--term"
-                v-model="termCard"
-                type="text"
-                @input="getTermInput"
-                ref="termInput"
-              />
-            </div>
-            <div class="">
-              <div class="pay__title">CVV</div>
-              <input
-                class="pay__input pay__input--cvv"
-                v-model="cvvCard"
-                type="text"
-                @input="getCvvInput"
-                ref="cvvInput"
-              />
-            </div>
+          <div :class="[isError ? 'shake--transition' : '', 'with-search']">
+            <base-input class="with-search__input" v-model="cityDelivery" type="text" placeholder="Населений пункт" />
+            <base-input class="with-search__input" v-model="numberDelivery" type="text" placeholder="Відділення" />
           </div>
-        </div>
+        </template>
+        <template v-else-if="typeDelivery === 'Самовивіз НоваПошта'">
+          <div :class="[isError ? 'shake--transition' : '', 'with-search']">
+            <base-input class="with-search__input" v-model="cityDelivery" type="text" placeholder="Населений пункт" />
+            <base-input class="with-search__input" v-model="numberDelivery" type="text" placeholder="Адреса" />
+          </div>
+        </template>
+        <template v-if="typeDelivery === 'Доставка УкрПошта'">
+          <div :class="[isError ? 'shake--transition' : '', 'with-search']">
+            <base-input class="with-search__input" v-model="cityDelivery" type="text" placeholder="Населений пункт" />
+            <base-input class="with-search__input" v-model="numberDelivery" type="text"
+              placeholder="Адреса або поштовий індекс" />
+          </div>
+        </template>
+        <template v-else-if="typeDelivery === 'Самовивіз УкрПошта'">
+          <div :class="[isError ? 'shake--transition' : '', 'with-search']">
+            <base-input class="with-search__input" v-model="cityDelivery" type="text" placeholder="Населений пункт" />
+            <base-input class="with-search__input" v-model="numberDelivery" type="text"
+              placeholder="Адреса або поштовий індекс" />
+          </div>
+        </template>
+        <!-- <base-input-whith-search
+          v-bind:isError="isError"
+          v-model:modelValue="numberDelivery"
+          v-bind:options="allNumberDelivery"
+        /> -->
+        <button type="submit" class="form__button form__button--confirm"
+          @click.stop="receiveOrderConfirmation('delivery'), modalSuccesfull = true">
+          {{ $t('confirmOrder1') }}
+        </button>
       </div>
     </div>
     <div class="check check--mobile">
@@ -252,32 +155,23 @@
         <div class="check__col-summ">{{ getTheSum }} ₴</div>
       </div>
       <div class="check__delivery">
-        <div class="check__delivery-title">Вартість доставки</div>
-        <div class="check__delivery-text">за тарифами перевізника</div>
+        <div class="check__delivery-title">{{ $t('deliveryPrice') }}</div>
+        <div class="check__delivery-text">{{ $t('deliveryText') }}</div>
       </div>
       <div class="check__summa">
-        <div class="check__summa-title">До сплати</div>
+        <div class="check__summa-title"> {{ $t('pay2') }}
+        </div>
         <div class="check__summa-text">{{ getTheSum }} ₴</div>
       </div>
-      <div
-        class="check__button"
-        @click.stop="receiveOrderConfirmation('delivery')"
-      >
-        Підтверджую замовлення
-      </div>
+    </div>
+    <div class="modalSuccesfull" v-if="modalSuccesfull">
+      {{ $t('confirmPlacingAnOrder') }}
     </div>
   </div>
 
-  <regModal
-    v-if="regContent"
-    @modal="(regContent = !regContent), (authContent = true)"
-    v-model:regContent="regContent"
-  />
-  <authModal
-    v-if="authContent"
-    @modal="(authContent = !authContent), (regContent = true)"
-    v-model:authContent="authContent"
-  />
+  <regModal v-if="regContent" @modal="(regContent = !regContent), (authContent = true)" v-model:regContent="regContent" />
+  <authModal v-if="authContent" @modal="(authContent = !authContent), (regContent = true)"
+    v-model:authContent="authContent" />
 </template>
 
 <script>
@@ -289,6 +183,7 @@ import authModal from "../components/base/authComponents/authModal.vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength } from "@vuelidate/validators";
 import axios from "axios";
+import { Exception } from "sass";
 
 export default {
   data() {
@@ -296,69 +191,40 @@ export default {
       v$: useVuelidate(),
       regContent: false,
       authContent: false,
-      cityDelivery: "",
-      vidilNP: "",
-      allCityDelivery: [
-        { id: 1, city: "Київ", obl: "Київ" },
-        { id: 2, city: "Вінниця", obl: "Вінниця" },
-        { id: 3, city: "Дніпро", obl: "Дніпро" },
-        { id: 4, city: "Донецьк", obl: "Донецьк" },
-        { id: 5, city: "Житомир", obl: "Житомир" },
-        { id: 5, city: "Запоріжжя", obl: "Запоріжжя" },
-        { id: 5, city: "Івано-Франківськ", obl: "Івано-Франківськ" },
-        { id: 5, city: "Кропивницький", obl: "Кропивницький" },
-        { id: 5, city: "Луганськ", obl: "Луганськ" },
-        { id: 5, city: "Луцьк", obl: "Луцьк" },
-        { id: 5, city: "Львів", obl: "Львів" },
-        { id: 5, city: "Миколаїв", obl: "Миколаїв" },
-        { id: 5, city: "Одеса", obl: "Одеса" },
-        { id: 5, city: "Полтава", obl: "Полтава" },
-        { id: 5, city: "Рівне", obl: "Рівне" },
-        { id: 5, city: "Суми", obl: "Суми" },
-        { id: 5, city: "Тернопіль", obl: "Тернопіль" },
-        { id: 5, city: "Ужгород", obl: "Ужгород" },
-        { id: 5, city: "Харків", obl: "Харків" },
-        { id: 5, city: "Херсон", obl: "Херсон" },
-        { id: 5, city: "Хмельницький", obl: "Хмельницький" },
-        { id: 5, city: "Черкаси", obl: "Черкаси" },
-        { id: 5, city: "Чернівці", obl: "Чернівці" },
-        { id: 5, city: "Чернігів", obl: "Чернігів" },
-      ],
-      numberDelivery: "",
-      allNumberDelivery: [
-        { id: 1, name: "№1" },
-        { id: 2, name: "№2" },
-        { id: 3, name: "№3" },
-        { id: 4, name: "№4" },
-        { id: 5, name: "№1" },
-        { id: 6, name: "№2" },
-        { id: 7, name: "№3" },
-        { id: 8, name: "№4" },
-        { id: 9, name: "№11" },
-        { id: 10, name: "№21" },
-        { id: 11, name: "№31" },
-        { id: 13, name: "№41" },
-        { id: 12, name: "№12" },
-        { id: 14, name: "№22" },
-        { id: 15, name: "№32" },
-        { id: 16, name: "№42" },
-        { id: 17, name: "№13" },
-        { id: 18, name: "№23" },
-        { id: 19, name: "№33" },
-        { id: 20, name: "№43" },
-        { id: 21, name: "№14" },
-        { id: 22, name: "№24" },
-        { id: 23, name: "№34" },
-        { id: 24, name: "№44" },
-      ],
       typeDelivery: "",
+      cityDelivery: "",
+      regionDelivery: "",
+      numberDelivery: "",
+      modalSuccesfull: false,
+      allCityDelivery: [
+        { id: 1, city: "Київ", obl: "Київська область" },
+        { id: 2, city: "Вінниця", obl: "Вінницька область" },
+        { id: 2, city: "Вінниця", obl: "Волинська область" },
+        { id: 3, city: "Дніпро", obl: "Дніпропетровська область" },
+        { id: 4, city: "Донецьк", obl: "Донецька область" },
+        { id: 5, city: "Житомир", obl: "Житомирська область" },
+        { id: 5, city: "Запоріжжя", obl: "Закарпатська область" },
+        { id: 5, city: "Запоріжжя", obl: "Запорізька область" },
+        { id: 5, city: "Івано-Франківськ", obl: "Івано-Франківськ область" },
+        { id: 5, city: "Кропивницький", obl: "Кіровогра́дська область" },
+        { id: 5, city: "Луганськ", obl: "Луганська область" },
+        { id: 5, city: "Львів", obl: "Львівська область" },
+        { id: 5, city: "Миколаїв", obl: "Миколаївська область" },
+        { id: 5, city: "Одеса", obl: "Одеська область" },
+        { id: 5, city: "Полтава", obl: "Полтавська область" },
+        { id: 5, city: "Рівне", obl: "Рівненська область" },
+        { id: 5, city: "Суми", obl: "Сумська область" },
+        { id: 5, city: "Тернопіль", obl: "Тернопільська область" },
+        { id: 5, city: "Харків", obl: "Харківська область" },
+        { id: 5, city: "Херсон", obl: "Херсонська область" },
+        { id: 5, city: "Хмельницький", obl: "Хмельницька область" },
+        { id: 5, city: "Черкаси", obl: "Черкаська область" },
+        { id: 5, city: "Чернівці", obl: "Чернівецька область" },
+        { id: 5, city: "Чернігів", obl: "Чернігівська область" },
+      ],
       payNow: "",
       cardInput: "",
       termInput: "",
-      numberCard: null,
-      termCard: null,
-      cvvCard: null,
-      cvvInput: "",
       products: [],
       user: [],
       isError: false,
@@ -390,12 +256,44 @@ export default {
         .reverse()
         .join("");
     },
+    getArray() {
+      let extractedProducts = [];
+      for (let product of this.products) {
+        const { summ, containerVolume, newPrice } = product;
+        const item = `товар: ${product.products.title}, ємність: ${containerVolume} кількість: ${summ} шт., ціна: ${newPrice} грн.`;
+        extractedProducts.push(item);
+      }
+      return extractedProducts.join(" ");
+    },
+  },
+  watch: {
+    modalSuccesfull(val) {
+      if (val === true) {
+        setTimeout(() => {
+          this.modalSuccesfull = false;
+        }, 3000);
+      }
+    },
   },
   methods: {
     sendMessage() {
+
       const token = "6700460046:AAHX2VEGlAkcmhXh2_S2zLvk_whH1eKghZU";
       const chatId = "@asdopklasdpkoaspodop";
-      const message = `Замовлення. Имя кліента: ${this.user.name} ${this.user.surname}.Телефон ${this.user.phone}. До сплати ${this.getTheSum}. Деталі замовлення на сайті.`;
+      const message = `\n
+📱 Замовлення:
+👤 Ім'я клієнта: ${this.user.name} ${this.user.surname}
+📲 Телефон: ${this.user.phone}
+💸 Сума до сплати: ${this.getTheSum} грн.
+⌨️ Тип оплати: ${this.payNow ? 'Реквизиты' : 'Наложка'}
+🧳 Товари:
+${this.getArray}
+
+📦 Доставка:
+📝 Тип доставки: ${this.typeDelivery}
+🏙  Місто доставки: ${this.cityDelivery}
+💠 Номер відділення: №${this.numberDelivery}
+`;
       const apiUrl = `https://api.telegram.org/bot${token}/sendMessage`;
 
       axios
@@ -429,7 +327,7 @@ export default {
     async fetchUpdatedData() {
       try {
         // this.isLoader = true;
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/edit`;
+        let urlStr = `https://eshopbackend-72da33f36405.herokuapp.com//user/edit`;
         const response = await axios.post(urlStr, {
           id: this.user._id,
           updatedData: {
@@ -448,20 +346,21 @@ export default {
         // this.isLoader = false;
       }
     },
-    async fetchAddOrder() {
+    async fetchOrderCreate() {
       try {
         this.isLoader = true;
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/addOrder`;
+        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/order/create`;
         const response = await axios.post(urlStr, {
-          token: this.token,
-          Object: {
-            timeOrder: Date.now(),
-            order: [...this.products],
-          },
+          name: this.user.name,
+          surname: this.user.surname,
+          typeDelivery: this.typeDelivery,
+          deliveryAddress: `Область ${this.regionDelivery.obl} місто ${this.cityDelivery}, номер почти чи ідекс ${this.numberDelivery}`,
+          typePayment: this.payNow
+            ? "Оплата за реквізитами"
+            : "Оплата при отриманні",
+          phone: this.user.phone,
+          order: [...this.products],
         });
-        if (response.data.edited) {
-          localStorage.setItem(`user`, JSON.stringify(this.user));
-        }
       } catch (err) {
         console.log(err);
       } finally {
@@ -527,9 +426,9 @@ export default {
         var top = element.offsetTop;
         window.scrollTo(0, top);
       } else {
-        this.fetchAddOrder();
+        // this.fetchAddOrder();
+        this.fetchOrderCreate();
         this.sendMessage();
-        this.products = [];
         localStorage.removeItem(`order`);
       }
     },
@@ -539,7 +438,6 @@ export default {
       user: {
         name: { required, minLength: minLength(3) },
         surname: { required, minLength: minLength(3) },
-        email: { required, email },
         phone: { required },
       },
     };
@@ -581,12 +479,70 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.type-of-delivery {
+  @media (max-width: 980px) {
+    margin-bottom: 80px;
+  }
+}
+
+@keyframes addedToCart {
+  from {
+    top: 0px;
+  }
+
+  to {
+    top: 75px;
+  }
+}
+
+.modalSuccesfull {
+  position: fixed;
+  top: 75px;
+  right: 200px;
+  background: #15ff00;
+  padding: 20px;
+  z-index: 15;
+  border-radius: 10px;
+  color: #292929;
+  animation: addedToCart 1.2s;
+
+  @media (max-width: 540px) {
+    right: 20px;
+  }
+}
+
+.with-search {
+  @media (max-width: 980px) {
+    display: flex;
+    flex-direction: column;
+    column-gap: 10px !important;
+
+    input {
+      font-size: 16px;
+      max-width: 90%;
+      padding: 15px;
+    }
+  }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin-bottom: 40px;
+
+  @media (max-width: 980px) {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
+
 input {
   outline: none;
 }
+
 .with-search {
   display: flex;
   column-gap: 30px;
+
   &__input {
     margin: 35px 0 30px;
     border: 1px solid rgb(0, 0, 0);
@@ -601,16 +557,19 @@ input {
     box-shadow:
       0 4px 6px -1px rgba(0, 0, 0, 0.1),
       0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
     @media screen and (max-width: 570px) {
       font-size: 0.75rem;
       padding: 8px 6px;
       line-height: normal;
       font-style: normal;
     }
+
     @media (min-width: 640px) {
       font-size: 0.875rem;
       line-height: 1.25rem;
     }
+
     @media screen and (max-width: 570px) {
       font-size: 0.625rem;
       padding: 8px 6px;
@@ -684,8 +643,7 @@ input {
   display: flex;
   justify-content: space-between;
 
-  &__right {
-  }
+  &__right {}
 
   &__left {
     width: 365px;
@@ -980,6 +938,7 @@ input {
     width: 116px;
     height: 116px;
     object-fit: contain;
+
     @media (max-width: 1040px) {
       max-width: 116px;
       max-height: 116px;
@@ -1044,11 +1003,9 @@ input {
   gap: 115px;
   margin-top: 50px;
 
-  &__left {
-  }
+  &__left {}
 
-  &__right {
-  }
+  &__right {}
 
   &__title {
     font-size: 1.5rem;
@@ -1108,11 +1065,11 @@ input {
   position: relative;
 }
 
-.radio-input:checked + .radio-label .radio-inner-circle {
+.radio-input:checked+.radio-label .radio-inner-circle {
   border-color: #000000;
 }
 
-.radio-input:checked + .radio-label .radio-inner-circle::after {
+.radio-input:checked+.radio-label .radio-inner-circle::after {
   content: "";
   display: block;
   width: 0.5em;
@@ -1124,9 +1081,12 @@ input {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .shake--transition {
   animation: shake 0.2s 4;
+
   @keyframes shake {
+
     0%,
     100% {
       translate: 0;
@@ -1141,6 +1101,7 @@ input {
     }
   }
 }
+
 .pay {
   margin-top: 40px;
 

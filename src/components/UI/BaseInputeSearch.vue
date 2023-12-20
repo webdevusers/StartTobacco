@@ -1,49 +1,22 @@
 <template>
   <Combobox as="div" v-model.stop="selectedPerson">
     <div class="search-input">
-      <ComboboxInput
-        placeholder="Введіть запит"
-        class="action-search-input"
-        autocomplete="off"
-        @change.prevent="query = $event.target.value"
-        :displayValue="(option) => option.title"
-      />
-      <!-- search-input__btn -->
-      <ComboboxButton class="action-search-button">
-        <div class="" @click="$event.target.value = ''">
+      <ComboboxInput :placeholder="$t('inputSearch')" class="action-search-input" autocomplete="off"
+        @change.prevent="query = $event.target.value" :displayValue="(option) => option.title" />
+      <div class="action-search-button">
+        <div @click="handleSearch">
           <img src="/icons/search.svg" alt="" />
         </div>
-      </ComboboxButton>
+      </div>
 
-      <transition
-        enter-active-class="transition duration-100 ease-out"
-        enter-from-class="transform scale-95 opacity-0"
-        enter-to-class="transform scale-100 opacity-100"
-        leave-active-class="transition duration-75 ease-out"
-        leave-from-class="transform scale-100 opacity-100"
-        leave-to-class="transform scale-95 opacity-0"
-      >
+      <transition enter-active-class="transition duration-100 ease-out" enter-from-class="transform scale-95 opacity-0"
+        enter-to-class="transform scale-100 opacity-100" leave-active-class="transition duration-75 ease-out"
+        leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
         <ComboboxOptions class="search-input__options">
           <div class="" v-if="options.length > 0">
-            <ComboboxOption
-              v-for="option in options"
-              :key="option._id"
-              :value="option"
-              v-slot="{ active, selected }"
-            >
-              <!-- {{ option }} -->
-              <li
-                :class="[
-                  ' search-input__list ',
-                  // selected ? 'text-dark-green ' : 'text-darc-grey-text',
-                ]"
-              >
-                <span
-                  :class="[
-                    'search-input__span ',
-                    // selected ? 'text-dark-green ' : 'text-darc-grey-text',
-                  ]"
-                >
+            <ComboboxOption v-for="option in options" :key="option._id" :value="option" v-slot="{ active, selected }">
+              <li :class="['search-input__list']">
+                <span :class="['search-input__span']">
                   <div v-if="option.title" class="search-input__title">
                     {{ option.title }}
                   </div>
@@ -55,29 +28,15 @@
       </transition>
     </div>
   </Combobox>
-  <!-- <div class="action-search">
-    <div class="action-search-input">
-      <input type="text" placeholder="Введите ваш запрос" v-model="request" />
-    </div>
-    <div class="action-search-button">
-      <img src="/icons/search.svg" alt="" />
-    </div>
-  </div> -->
 </template>
 
 <script>
 import { ref } from "vue";
-import { CheckIcon, XMarkIcon } from "@heroicons/vue/20/solid";
-import {
-  Combobox,
-  ComboboxButton,
-  ComboboxInput,
-  ComboboxOption,
-  ComboboxOptions,
-} from "@headlessui/vue";
+import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from "@headlessui/vue";
+import { useRouter } from "vue-router";
 
 export default {
-  name: "base-inpute-search",
+  name: "BaseInputSearch",
   data() {
     return {
       query: "",
@@ -85,10 +44,6 @@ export default {
     };
   },
   props: {
-    // modelValue: {
-    //   type: [String, Number],
-    //   required: false,
-    // },
     fuzzySearch: {
       type: String,
       required: false,
@@ -99,12 +54,20 @@ export default {
   },
   components: {
     Combobox,
-    ComboboxButton,
     ComboboxInput,
     ComboboxOption,
     ComboboxOptions,
-    CheckIcon,
-    XMarkIcon,
+  },
+  methods: {
+    handleSearch() {
+      if (this.query.trim() !== "") {
+        // Используем объект $router для перехода на страницу "search" и передачи параметра query
+        this.$router.push({
+          name: "search",
+          query: { query: this.query },
+        });
+      }
+    },
   },
   watch: {
     query(newValue) {
@@ -114,22 +77,19 @@ export default {
     selectedPerson(newValue) {
       // this.$emit("update:modelValue", newValue._id);
       this.$router.push({
-        path: `/flavoring/`,
+        name: "flavoring",
         query: { flavoringId: newValue._id },
       });
     },
   },
-  mounted() {
-    // if (this.modelValue === "") {
-    // this.selectedPerson = "";
-    // }
-  },
 };
 </script>
+
 
 <style lang="scss" scoped>
 .search-input {
   position: relative;
+
   // margin-top: 0.25rem;
   // &__btn {
   //   display: flex;
@@ -153,6 +113,7 @@ export default {
     border-radius: 0px 0px 5px 5px;
     max-height: 450px;
     width: 545px;
+
     @media (max-width: 1220px) {
       max-width: 545px;
     }
@@ -162,9 +123,14 @@ export default {
     }
 
     @media (max-width: 570px) {
-      max-width: 210px;
+      max-width: 425px;
+      top: 55px;
+      left: 29%;
+      border-radius: 5px;
+      transform: translate(-50%);
     }
   }
+
   &__list {
     position: relative;
     padding-left: 0.5rem;
@@ -173,6 +139,7 @@ export default {
     cursor: pointer;
     user-select: none;
   }
+
   &__span {
     display: flex;
     padding-top: 0.5rem;
@@ -183,6 +150,7 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   &__title {
     padding-left: 1rem;
     font-weight: 700;
@@ -191,6 +159,7 @@ export default {
     white-space: nowrap;
   }
 }
+
 .action {
   background: #292929;
   position: relative;
@@ -222,11 +191,11 @@ export default {
       }
 
       @media (max-width: 970px) {
-        max-width: 250px;
+        max-width: 400px;
       }
 
       @media (max-width: 570px) {
-        max-width: 210px;
+        max-width: 290px;
       }
     }
 
@@ -244,6 +213,7 @@ export default {
       // border-top-right-radius: 0.25rem;
       // border-bottom-right-radius: 0.25rem;
       cursor: pointer;
+
       &:hover {
         cursor: pointer;
         opacity: 1;

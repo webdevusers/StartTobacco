@@ -2,37 +2,21 @@
   <Combobox v-model="selected" :class="[isError ? 'shake--transition' : '']">
     <div class="combobox">
       <div class="combobox__block-input">
-        <ComboboxInput
-          class="combobox__input"
-          :displayValue="(options) => options.name"
-          @change="query = $event.target.value"
-          placeholder="Відділення"
-        />
+        <ComboboxInput class="combobox__input" :displayValue="(options) => options.name"
+          @change="query = $event.target.value" placeholder="Відділення" />
         <ComboboxButton class="combobox__button">
           <ChevronUpDownIcon class="combobox__icon" aria-hidden="true" />
         </ComboboxButton>
       </div>
-      <TransitionRoot
-        leave="transition ease-in duration-100"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
-        @after-leave="query = ''"
-      >
+      <TransitionRoot leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0"
+        @after-leave="query = ''">
         <ComboboxOptions class="options">
-          <div
-            v-if="filteredOptions.length === 0 && query !== ''"
-            class="options__error"
-          >
+          <div v-if="filteredOptions.length === 0 && query !== ''" class="options__error">
             Nothing found.
           </div>
 
-          <ComboboxOption
-            v-for="options in filteredOptions"
-            as="template"
-            :key="options.id"
-            :value="options"
-            v-slot="{ selected, active }"
-          >
+          <ComboboxOption v-for="options in filteredOptions" as="template" :key="options.id" :value="options"
+            v-slot="{ selected, active }">
             <li class="options__item">
               <span class="options__item-title">
                 {{ options.name }}
@@ -95,11 +79,11 @@ export default {
       return query.value === ""
         ? this.options
         : this.options.filter((options) =>
-            options.name
-              .toLowerCase()
-              .replace(/\s+/g, "")
-              .includes(query.value.toLowerCase().replace(/\s+/g, ""))
-          );
+          options.name
+            .toLowerCase()
+            .replace(/\s+/g, "")
+            .includes(query.value.toLowerCase().replace(/\s+/g, ""))
+        );
     },
   },
   watch: {
@@ -108,6 +92,7 @@ export default {
         this.$emit("update:modelValue", newValue);
       }
     },
+    
   },
   mounted() {
     if (this.modelValue) {
@@ -116,13 +101,17 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
 input {
   outline: none;
 }
+
 .shake--transition {
   animation: shake 0.2s 4;
+
   @keyframes shake {
+
     0%,
     100% {
       translate: 0;
@@ -137,9 +126,11 @@ input {
     }
   }
 }
+
 .combobox {
   position: relative;
   margin: 35px 0 30px;
+
   @media (max-width: 570px) {
     margin: 30px 0 20px;
   }
@@ -162,12 +153,14 @@ input {
       font-size: 0.875rem;
       line-height: 1.25rem;
     }
+
     @media screen and (max-width: 570px) {
       font-size: 0.625rem;
       padding: 8px 6px;
       max-width: 140px;
     }
   }
+
   &__input {
     border-style: none;
     font-size: 0.875rem;
@@ -177,6 +170,7 @@ input {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+
     @media screen and (max-width: 570px) {
       font-size: 0.75rem;
       padding: 8px 6px;
@@ -184,6 +178,7 @@ input {
       font-style: normal;
     }
   }
+
   &__button {
     display: flex;
     position: absolute;
@@ -193,12 +188,14 @@ input {
     padding-right: 0.5rem;
     align-items: center;
   }
+
   &__icon {
     width: 1.25rem;
     height: 1.25rem;
     color: #9ca3af;
   }
 }
+
 .options {
   overflow: auto;
   position: absolute;
@@ -206,8 +203,7 @@ input {
   padding-bottom: 0.25rem;
   margin-top: 0.25rem;
   border-radius: 0.375rem;
-  box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width))
-    var(--tw-ring-color);
+  box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   --ring-color: #000000;
   --ring-opacity: 0.05;
   width: 245px;
@@ -222,9 +218,11 @@ input {
     font-size: 0.875rem;
     line-height: 1.25rem;
   }
+
   @media screen and (max-width: 570px) {
     max-width: 140px;
   }
+
   &__error {
     position: relative;
     padding-top: 0.5rem;
@@ -235,6 +233,7 @@ input {
     cursor: default;
     user-select: none;
   }
+
   &__item {
     position: relative;
     padding-top: 0.5rem;
@@ -244,6 +243,7 @@ input {
     cursor: default;
     user-select: none;
   }
+
   &__item-title {
     display: block;
     overflow: hidden;

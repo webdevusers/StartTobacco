@@ -14,18 +14,11 @@
                 {{ category.title }}
               </a>
             </li>
-            <svg
-              class="breadcrumbs__svg"
-              width="5"
-              height="13"
-              viewBox="0 0 5 13"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            <svg class="breadcrumbs__svg" width="5" height="13" viewBox="0 0 5 13" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M0.0174308 11.4567C0.0689392 11.6683 0.192559 11.8587 0.347084 11.9646C0.420912 12.0139 0.456968 12.021 0.61321 12.021C0.778037 12.021 0.802073 12.0163 0.887921 11.9552C0.965183 11.8987 1.34806 11.3861 2.93452 9.21574C4.55703 6.99599 4.89698 6.51865 4.94334 6.40108C4.99657 6.26705 5 6.24823 5 6.01309C5 5.77795 4.99657 5.75914 4.94334 5.6251C4.89698 5.50518 4.55875 5.03254 2.92593 2.80104C1.37038 0.672993 0.948014 0.108649 0.879336 0.0616207C0.805507 0.0122404 0.769452 0.00518608 0.61321 0.00518608C0.448384 0.00518608 0.424346 0.0122404 0.335065 0.0733776C0.216596 0.155678 0.117013 0.292061 0.0517697 0.463716C0.00884628 0.581286 0.00369501 0.616558 0.00369501 0.828186C0.00369501 1.23969 -0.145679 1.00454 1.79618 3.66636L3.50626 6.01309L1.79618 8.35747C-0.123359 10.9934 0.00884581 10.7841 0.000261307 11.1627C-0.00145578 11.2803 0.0054121 11.4002 0.0174308 11.4567Z"
-                fill="black"
-              />
+                fill="black" />
             </svg>
             <li class="breadcrumbs__item">
               <a class="breadcrumbs__link" href="#" @click="goToSection">
@@ -42,30 +35,16 @@
         </div>
         <div class="reviews">
           <div class="reviews__stars" v-if="products.ratingVoid">
-            <div
-              v-for="rating in [0, 1, 2, 3, 4]"
-              :key="rating"
-              :class="[
-                products.ratingVoid > rating
-                  ? 'reviews__star--yellow'
-                  : 'reviews__star--gray',
-                'reviews__star',
-              ]"
-              aria-hidden="true"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                />
+            <div v-for="rating in [0, 1, 2, 3, 4]" :key="rating" :class="[
+              products.ratingVoid > rating
+                ? 'reviews__star--yellow'
+                : 'reviews__star--gray',
+              'reviews__star',
+            ]" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
               </svg>
             </div>
           </div>
@@ -80,44 +59,34 @@
         </div>
 
         <div class="capacity">
-          <div
-            class="capacity__title"
-            v-if="products?.containerVolume?.length > 0"
-          >
-            Ємність
+          <div class="capacity__title" v-if="products?.containerVolume?.length > 0">
+            {{ $t('Emnist') }}
           </div>
-          <base-select
-            v-if="products?.containerVolume?.length > 0"
-            class="capacity__select"
-            v-model:modelValue="containerVolume"
-            v-bind:options="products.containerVolume"
-          />
+          <base-select v-if="products?.containerVolume?.length > 0" class="capacity__select"
+            v-model:modelValue="containerVolume" v-bind:options="products.containerVolume" />
         </div>
         <div class="number">
-          <div class="number__title">Кількість</div>
+          <div class="number__title">{{ $t('countText') }}</div>
           <div class="number__box">
             <button class="number__btn number__btn--minus" @click="minesOne()">
               -
             </button>
 
-            <input
-              type="text"
-              class="number__value"
-              :value="summ"
-              @input="summ = $event.target.value"
-            />
+            <input type="text" class="number__value" :value="summ" @input="summ = $event.target.value" />
             <button class="number__btn number__btn--plus" @click="plusOne()">
               +
             </button>
           </div>
         </div>
-
-        <button class="button" @click="addToCart">Додати до кошику</button>
+        <button class="button" @click="addToCart">{{ $t('addToCart') }}</button>
       </div>
     </div>
     <div class="description" v-if="products.text">
-      <div class="description__title">Опис</div>
+      <div class="description__title">{{ $t('flavoringDesc') }} </div>
       <div class="description__text">{{ products?.text }}</div>
+    </div>
+    <div class="modalSuccesfull" v-if="modalSuccesfull">
+      {{ $t('addedtocart') }}
     </div>
   </div>
   <div v-else>
@@ -135,11 +104,13 @@ export default {
     return {
       products: [],
       isLoader: false,
-      containerVolume: "0.1л",
+      containerVolume: '',
       summ: 1,
       section: {},
       category: "",
       token: "",
+      cart: false,
+      modalSuccesfull: false,
     };
   },
   methods: {
@@ -152,6 +123,7 @@ export default {
       }
     },
     addToCart() {
+      this.modalSuccesfull = true;
       let purchase = [
         {
           containerVolume: this.containerVolume,
@@ -198,21 +170,34 @@ export default {
     async fetchGetProduct(item) {
       try {
         this.isLoader = true;
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/product/find/${item}`;
-        // console.log(urlStr);
+        let urlStr;
+
+        if (this.$i18n.locale === 'ua') {
+          urlStr = `https://eshopbackend-72da33f36405.herokuapp.com/items/product/find/${item}`;
+        } else {
+          urlStr = `https://starttobacco-ru-back-4dd977c1528b.herokuapp.com/items/product/find/${item}`;
+        }
+
         const response = await axios.get(urlStr, {});
         this.products = response.data.product;
-        // console.log(this.products);
       } catch (err) {
         console.log(err);
       } finally {
         this.isLoader = false;
       }
     },
+
     async fetchFindSection(id) {
       try {
         this.isLoader = true;
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/section/find/${id}`;
+        let urlStr;
+
+        if (this.$i18n.locale === 'ua') {
+          urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/section/find/${id}`;
+        } else {
+          urlStr = `https://starttobacco-ru-back-4dd977c1528b.herokuapp.com/items/section/find/${id}`;
+        }
+
         const response = await axios.get(urlStr, {});
 
         this.section = {
@@ -227,10 +212,18 @@ export default {
         this.isLoader = false;
       }
     },
+
     async fetchFindCategory(id) {
       try {
         this.isLoader = true;
-        let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/category/find/${id}`;
+        let urlStr;
+
+        if (this.$i18n.locale === 'ua') {
+          urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/items/category/find/${id}`;
+        } else {
+          urlStr = `https://starttobacco-ru-back-4dd977c1528b.herokuapp.com/items/category/find/${id}`;
+        }
+
         const response = await axios.get(urlStr, {});
         this.category = {
           title: response.data.category.title,
@@ -242,6 +235,7 @@ export default {
         this.isLoader = false;
       }
     },
+
     async fetchAddViews() {
       try {
         let urlStr = `https://damp-sands-00500-b961cd19fbea.herokuapp.com/user/views/add`;
@@ -272,6 +266,22 @@ export default {
     const currentParams = { ...this.$route.query };
     this.fetchGetProduct(currentParams.flavoringId);
   },
+  beforeUnmount() {
+    console.log(1)
+    if (
+      this.products &&
+      this.products.containerVolume &&
+      Array.isArray(this.products.containerVolume) &&
+      this.products.containerVolume.length > 0
+    ) {
+      this.$nextTick(() => {
+        const volume = this.products.containerVolume[0];
+        console.log("Container Volume Value Before Update:", volume.value);
+        console.log("Container Volume Value After Update:", volume.value);
+      });
+    }
+  },
+
   mounted() {
     this.$nextTick(async function () {
       this.token = JSON.parse(localStorage.getItem(`token`));
@@ -284,22 +294,61 @@ export default {
       }
     });
   },
+  watch: {
+    modalSuccesfull(val) {
+      if (val === true) {
+        setTimeout(() => {
+          this.modalSuccesfull = false;
+        }, 3000);
+      }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+@keyframes addedToCart {
+  from {
+    top: 0px;
+  }
+
+  to {
+    top: 75px;
+  }
+}
+
+.modalSuccesfull {
+  position: fixed;
+  top: 75px;
+  right: 100px;
+  background: #15ff00;
+  padding: 20px;
+  z-index: 15;
+  border-radius: 10px;
+  color: #292929;
+  animation: addedToCart 1.2s;
+
+  @media (max-width: 540px) {
+    right: 20px;
+  }
+}
+
 .colorbg {
   background: #00000050;
 }
+
 a {
   text-decoration: none;
 }
+
 input {
   outline: none;
 }
+
 .box-mibale {
   display: none;
 }
+
 .container {
   box-sizing: border-box;
   font-family: "tobacco";
@@ -307,11 +356,13 @@ input {
   margin: 66px auto 90px;
   padding: 0 10px;
 }
+
 .box {
   display: grid;
   grid-template-columns: 45% 1fr; //530px
 
   gap: 80px;
+
   &__left {
     background: #ffffff;
     border-radius: 10px;
@@ -320,18 +371,19 @@ input {
     object-fit: cover;
     margin: auto;
     position: relative;
-    box-shadow: var(
-      --shadowforcards-box-shadow,
-      5px 5px 25px 0px rgba(0, 0, 0, 0.2)
-    );
+    box-shadow: var(--shadowforcards-box-shadow,
+        5px 5px 25px 0px rgba(0, 0, 0, 0.2));
   }
 }
+
 .card__img {
-  padding: 0 10px;
-  width: 100%;
+  padding: 30px 10px;
+  width: 90%;
+  margin: 0 auto;
 
   object-fit: contain;
 }
+
 .breadcrumbs {
   font-size: 14px;
   font-style: normal;
@@ -339,6 +391,7 @@ input {
   line-height: normal;
   padding-bottom: 26px;
   width: 150%;
+
   &__list {
     display: flex;
     padding: 0;
@@ -349,6 +402,7 @@ input {
   &__svg {
     margin: 0 20px;
   }
+
   &__link {
     color: #000000;
     text-align: left;
@@ -356,6 +410,7 @@ input {
     position: relative;
   }
 }
+
 .goods {
   &__title {
     color: #000000;
@@ -365,36 +420,44 @@ input {
     padding-bottom: 40px;
   }
 }
+
 .reviews {
   display: flex;
   align-items: center;
   justify-content: space-between;
   max-width: 300px;
   margin-bottom: 45px;
+
   &__stars {
     display: flex;
     gap: 5px;
   }
+
   &__star {
     content: "★";
     height: 18px;
     width: 18px;
+
     &--yellow {
       color: #ffc107;
     }
+
     &--gray {
       color: gray;
     }
   }
+
   &__voits {
     display: flex;
     width: 90px;
     gap: 15px;
   }
+
   &__icons {
     width: 25px;
     height: 25px;
   }
+
   &__text {
     color: #292929;
     font-family: "tobacco";
@@ -404,11 +467,13 @@ input {
     line-height: normal;
   }
 }
+
 .prises {
   display: flex;
   font-family: "tobacco";
   width: 240px;
   gap: 25px;
+
   &__oldPrice {
     color: rgba(41, 41, 41, 0.5);
     text-decoration: line-through;
@@ -418,6 +483,7 @@ input {
     line-height: normal;
     letter-spacing: 0.76px;
   }
+
   &__newPrice {
     font-size: 40px;
     font-style: normal;
@@ -426,9 +492,11 @@ input {
     letter-spacing: 0.8px;
   }
 }
+
 .capacity {
   font-family: "tobacco";
   margin: 45px 0;
+
   &__title {
     font-size: 22px;
     font-style: normal;
@@ -441,8 +509,10 @@ input {
     margin-bottom: 10px;
   }
 }
+
 .number {
   font-family: "tobacco";
+
   &__title {
     color: #000000;
     margin-bottom: 10px;
@@ -451,10 +521,12 @@ input {
     font-weight: 400;
     line-height: normal;
   }
+
   &__box {
     display: flex;
     align-items: center;
   }
+
   &__value {
     width: 170px;
     background: rgba(216, 216, 216, 0.4);
@@ -466,6 +538,7 @@ input {
     text-align: center;
     margin: 0 15px;
   }
+
   &__btn {
     font-size: 1rem;
     font-weight: 600;
@@ -473,6 +546,7 @@ input {
     background: transparent;
   }
 }
+
 .button {
   background: #efca00;
   border-radius: 3px;
@@ -486,13 +560,16 @@ input {
   line-height: normal;
   letter-spacing: 0.44px;
   margin-top: 45px;
+
   &:hover {
     background: #d1b204;
   }
 }
+
 .description {
   margin: 109px 0;
   text-align: start;
+
   &__title {
     font-size: 32px;
     font-style: normal;
@@ -501,6 +578,7 @@ input {
     letter-spacing: 0.64px;
     margin-bottom: 45px;
   }
+
   &__text {
     font-size: 28px;
     font-style: normal;
@@ -509,16 +587,19 @@ input {
     letter-spacing: 0.56px;
   }
 }
+
 @media screen and (max-width: 1440px) {
   .container {
     font-family: "tobacco";
     max-width: 865px;
   }
+
   .box {
     display: grid;
     grid-template-columns: 42% 1fr;
 
     gap: 10%;
+
     &__left {
       background: #ffffff;
       border-radius: 10px;
@@ -526,18 +607,22 @@ input {
       height: 475px;
     }
   }
+
   .card__img {
     padding: 50px 10px;
     width: 100%;
     max-height: 465px;
     object-fit: contain;
   }
+
   .card__hover {
     position: relative;
   }
+
   .breadcrumbs {
     padding-bottom: 26px;
     width: 150%;
+
     &__item {
       overflow: hidden;
       display: -webkit-box;
@@ -545,6 +630,7 @@ input {
       -webkit-line-clamp: 1;
     }
   }
+
   .goods {
     &__title {
       font-size: 24px;
@@ -553,50 +639,61 @@ input {
 
   .prises {
     gap: 40px;
+
     &__oldPrice {
       font-size: 30px;
       letter-spacing: 0.6px;
     }
+
     &__newPrice {
       font-size: 32px;
       letter-spacing: 0.64px;
     }
   }
+
   .capacity {
     margin: 50px 0;
+
     &__title {
       font-size: 20px;
     }
   }
+
   .number {
     &__title {
       font-size: 20px;
     }
   }
+
   .description {
     margin: 109px 0;
     text-align: start;
+
     &__title {
       font-size: 28px;
       letter-spacing: 0.56px;
       margin-bottom: 45px;
     }
+
     &__text {
       font-size: 24px;
       letter-spacing: 0.48px;
     }
   }
 }
+
 @media screen and (max-width: 1040px) {
   .container {
     font-family: "tobacco";
     max-width: 819px;
   }
+
   .box {
     display: grid;
     grid-template-columns: 36% 1fr;
 
     gap: 10%;
+
     &__left {
       background: #ffffff;
       border-radius: 10px;
@@ -604,51 +701,62 @@ input {
       height: 375px;
     }
   }
+
   .card__img {
     padding: 40px 10px;
     width: 100%;
     max-height: 375px;
     object-fit: contain;
   }
+
   .card__hover {
     position: relative;
   }
+
   .breadcrumbs {
     padding-bottom: 44px;
     width: 90%;
   }
+
   .goods {
     &__title {
       font-size: 24px;
     }
   }
+
   .reviews {
     &__text {
       letter-spacing: 0.37px;
     }
   }
+
   .prises {
     gap: 40px;
+
     &__oldPrice {
       font-size: 28px;
       letter-spacing: 0.56px;
     }
+
     &__newPrice {
       font-size: 29px;
       letter-spacing: 0.58px;
     }
   }
+
   .capacity {
     &__title {
       font-size: 18px;
       letter-spacing: 0.36px;
     }
   }
+
   .number {
     &__title {
       font-size: 18px;
     }
   }
+
   .button {
     background: #efca00;
     border-radius: 3px;
@@ -662,20 +770,24 @@ input {
     line-height: normal;
     letter-spacing: 0.32px;
   }
+
   .description {
     margin: 70px 0;
     text-align: start;
+
     &__title {
       font-size: 24px;
       letter-spacing: 0.48px;
       margin-bottom: 45px;
     }
+
     &__text {
       font-size: 22px;
       letter-spacing: 0.44px;
     }
   }
 }
+
 @media screen and (max-width: 570px) {
   .container {
     font-family: "tobacco";
@@ -683,10 +795,12 @@ input {
     margin: 12px auto 90px;
     padding: 0 28px;
   }
+
   .box {
     display: flex;
     flex-direction: column;
     gap: 0px;
+
     &__left {
       display: none;
     }
@@ -695,12 +809,14 @@ input {
   .card__hover {
     position: relative;
   }
+
   .breadcrumbs {
     font-size: 0.625rem;
     padding-bottom: 26px;
     display: flex;
     justify-content: center;
     width: auto;
+
     &__list {
       display: flex;
       padding: 0;
@@ -715,6 +831,7 @@ input {
       position: relative;
     }
   }
+
   .box-mibale {
     display: flex;
     background: #ffffff;
@@ -724,10 +841,9 @@ input {
     margin: 0 25%;
     object-fit: cover;
 
-    box-shadow: var(
-      --shadowforcards-box-shadow,
-      5px 5px 25px 0px rgba(0, 0, 0, 0.2)
-    );
+    box-shadow: var(--shadowforcards-box-shadow,
+        5px 5px 25px 0px rgba(0, 0, 0, 0.2));
+
     &__img {
       padding: 3rem 1rem;
     }
@@ -743,83 +859,101 @@ input {
       padding-bottom: 1.25rem;
     }
   }
+
   .reviews {
     display: flex;
     align-items: center;
     justify-content: space-between;
     max-width: 300px;
     margin-bottom: 2.5rem;
+
     &__stars {
       display: flex;
       gap: 5px;
     }
+
     &__star {
       content: "★";
       height: 10px;
       width: 10px;
+
       &--yellow {
         color: #ffc107;
       }
+
       &--gray {
         color: gray;
       }
     }
+
     &__voits {
       display: flex;
       width: 90px;
       gap: 15px;
     }
+
     &__icons {
       width: 18px;
       height: 18px;
     }
+
     &__text {
       color: #292929;
       font-family: "tobacco";
       font-size: 0.875rem;
     }
   }
+
   .prises {
     display: flex;
     font-family: "tobacco";
     width: 50%;
     gap: 20%;
+
     &__oldPrice {
       color: rgba(41, 41, 41, 0.5);
       font-size: 22px;
       letter-spacing: 0.44px;
     }
+
     &__newPrice {
       font-size: 24px;
       letter-spacing: 0.48px;
     }
   }
+
   .capacity {
     font-family: "tobacco";
 
     margin: 2.5rem 0;
+
     &__title {
       font-size: 18px;
       letter-spacing: 0.36px;
       margin-bottom: 10px;
     }
+
     &__select {
       height: 100%;
       width: 50%;
     }
   }
+
   .number {
     font-family: "tobacco";
+
     &__title {
       font-size: 18px;
       letter-spacing: 0.36px;
       margin-bottom: 10px;
     }
+
     &__box {
       display: flex;
       align-items: center;
       width: 40%;
     }
+
     &__value {
       width: 100%;
       background: rgba(216, 216, 216, 0.4);
@@ -832,13 +966,16 @@ input {
       margin: 0;
       order: 1;
     }
+
     &__btn {
       border: none;
       background: transparent;
+
       &--minus {
         order: 2;
         margin: 0 15px;
       }
+
       &--plus {
         order: 3;
       }
@@ -856,15 +993,19 @@ input {
     margin: 45px auto;
     display: block;
     color: rgba(0, 0, 0, 0.8);
+
     &:hover {
       background: #d1b204;
     }
   }
+
   .description {
     margin: 0 0 45px;
+
     &__title {
       font-size: 20px;
     }
+
     &__text {
       font-size: 18px;
     }
